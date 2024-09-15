@@ -8,6 +8,11 @@ Route::get('/', function () {
 });
 
 //admin routes
-Route::get('/new_welcome', function () {
+Route::get('/admin', function () {
     return view('admin.new_welcome');
+});
+
+//user
+Route::get('/user', function () {
+    return view('user.new_user_welcome');
 });

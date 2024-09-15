@@ -1,4 +1,4 @@
-@extends('admin.layout.master')
+@extends('user.layout.master')
 
 @section('title', 'Dashboard')
 
@@ -11,7 +11,7 @@
                 <div class="card">
                     <div class="card-content text-center">
                         <div class="card-body">
-                            <h1 class="">Welcome Admin ...</h1>
+                            <h1 class="">Welcome User ...</h1>
                         </div>
                     </div>
                 </div>
