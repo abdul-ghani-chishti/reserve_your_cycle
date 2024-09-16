@@ -13,18 +13,34 @@ class RedirectIfAuthenticated
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next)
     {
+
         if (! $request->expectsJson()) {
+
             $path = $request->path();
 
             // Check for admin prefix
             if (str_starts_with($path, 'admin')) {
-                return redirect()->route('admin.login');
+                dd(1);
+                return redirect()->route('login.admin_login');
             }
-            // Default route for regular users
-            return redirect()->route('user.login');
+            elseif(str_starts_with($path, 'user'))
+            {
+                dd(2);
+                // Default route for regular users
+                return route('login.user_login');
+            }
+            else
+            {
+                dd(3);
+                return route('login');
+            }
         }
-        return redirect()->route('/');
+        else
+        {
+            dd(4);
+            return redirect()->route('/');
+        }
     }
 }

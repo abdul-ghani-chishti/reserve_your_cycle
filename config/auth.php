@@ -71,7 +71,7 @@ return [
         ],
         'admins' => [
             'driver' => 'eloquent',
-            'model' => App\Models\Admin::class,
+            'model' => env('Auth_MODEL',App\Models\Admin::class),
         ],
 
 
