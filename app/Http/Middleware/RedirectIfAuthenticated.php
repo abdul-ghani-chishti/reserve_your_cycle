@@ -15,7 +15,7 @@ class RedirectIfAuthenticated
      */
     public function handle(Request $request, Closure $next)
     {
-
+        dd('handle function');
         if (! $request->expectsJson()) {
 
             $path = $request->path();
