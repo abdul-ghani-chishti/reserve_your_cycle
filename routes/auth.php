@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
+use App\Http\Controllers\Auth\CycleInfoController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\Auth\NewPasswordController;
@@ -12,6 +13,7 @@ use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
+
     Route::get('register', [RegisteredUserController::class, 'create'])
                 ->name('register');
 
@@ -36,6 +38,11 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
+
+    Route::prefix('cycle_info')->name('cycle_info.')->group(function () {
+        Route::post('add_cycle_modal_form', [CycleInfoController::class, 'cycle_info'])->name('add_cycle_modal_form');
+    });
+
     Route::get('verify-email', EmailVerificationPromptController::class)
                 ->name('verification.notice');
 

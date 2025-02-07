@@ -198,34 +198,10 @@
                 <div class="card">
                     <div class="card-content text-center">
                         <div class="card-body">
-                            <h1 class="mb-5">Welcome Admin ...</h1>
+                            <h1 class="mb-5">Welcome Super Admin ...</h1>
                             <div class="container">
                                 <div class="row justify-content-center">
-                                    <div class="home_quicklink">
-                                        <a class="quicklink link1" href="#">
-                                            <span class="ql_caption">
-                                                <span class="outer">
-                                                    <span class="inner">
-                                                        <h2>Rent your Cycle</h2>
-                                                    </span>
-                                                </span>
-                                            </span>
-                                            <span class="ql_top"></span>
-                                            <span class="ql_bottom"></span>
-                                        </a>
-                                        <a class="quicklink link3" href="#">
-                                            <span class="ql_caption">
-                                                <span class="outer">
-                                                    <span class="inner">
-                                                        <h2>Deactivate </h2>
-                                                    </span>
-                                                </span>
-                                            </span>
-                                            <span class="ql_top"></span>
-                                            <span class="ql_bottom"></span>
-                                        </a>
-                                        <div class="clear"></div>
-                                    </div>
+
                                 </div>
                             </div>
                         </div>

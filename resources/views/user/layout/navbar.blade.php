@@ -44,6 +44,12 @@
                                 <h2 class="d-inline-block m-0 align-middle primary"><i class="la la-crosshairs m-0"></i></h2>
                             </div>
                         </a>
+                        <a class=" nav-link d-inline-flex align-middle p-0" id="logout" target="_blank">
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button class="m-0 bg-white primary rounded custom-nav-buttons-padding" type="submit">Logout</button>
+                            </form>
+                        </a>
                     </li>
 
                 </ul>
