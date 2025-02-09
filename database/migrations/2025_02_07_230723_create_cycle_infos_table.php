@@ -12,7 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('cycle_infos', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
+            $table->integer('owner_id')->index(); // user_id
+            $table->integer('cycle_status_id')->index();
+            $table->string('brand');
+            $table->string('description');
+            $table->string('type');
+            $table->string('model');
             $table->timestamps();
         });
     }
