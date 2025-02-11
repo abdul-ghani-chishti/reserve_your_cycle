@@ -261,7 +261,7 @@
                             {{ csrf_field() }}
                         <div class="row justify-content-center">
                             <div class="form-group col-5">
-                                <input type="text" name="cycle_brand_name" id="cycle_brand_name" class="form-control scan_piece"
+                                <input type="text" name="cycle_brand_name" id="cycle_brand_name" class="form-control cycle_brand_name"
                                        placeholder="Cycle Brand Name">
                             </div>
                             <div class="form-group col-5">
@@ -273,23 +273,23 @@
                                        placeholder="Cycle Model">
                             </div>
                             <div class="form-group col-5">
-                                <input type="text" name="cycle_type" id="cycle_type" class="form-control cycle_type"
-                                       placeholder="Cycle Type">
+                                <input type="text" name="cycle_quality" id="cycle_quality" class="form-control cycle_quality"
+                                       placeholder="Cycle Quality">
                             </div>
                             <div class="form-group col-md-10">
-                                <textarea type="text" name="cycle_description" id="cycle_description" class="form-control cycle_type"
+                                <textarea type="text" name="cycle_description" id="cycle_description" class="form-control cycle_description"
                                           placeholder="Cycle Description"></textarea>
                             </div>
                             <div class="form-group col-5">
-                                <input type="time" name="cycle_available_from" id="cycle_available_from" class="form-control cycle_type"
+                                <input type="text" name="cycle_available_from" id="cycle_available_from" class="form-control cycle_available_from"
                                        placeholder="Cycle Available From">
                             </div>
                             <div class="form-group col-5">
-                                <input type="time" name="cycle_available_to" id="cycle_available_to" class="form-control cycle_available_to"
+                                <input type="text" name="cycle_available_to" id="cycle_available_to" class="form-control cycle_available_to"
                                        placeholder="Cycle Available To">
                             </div>
                             <div class="form-group col-5">
-                                <input type="text" name="cycle_available_date" id="cycle_available_date" class="form-control cycle_available_to"
+                                <input type="text" name="cycle_available_date" id="cycle_available_date" class="form-control cycle_available_date"
                                        placeholder="Cycle Available Date">
                             </div>
                         </div>
@@ -321,6 +321,7 @@
     <script src="{{asset('app-assets/vendors/js/pickers/pickadate/picker.date.js')}}" type="text/javascript"></script>
     <script src="{{asset('app-assets/vendors/js/pickers/pickadate/legacy.js')}}" type="text/javascript"></script>
     <script src="{{asset('app-assets/vendors/js/forms/validation/jquery.validate.min.js')}}" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pickadate.js/3.6.4/picker.time.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -338,6 +339,38 @@
             var maxDate = new Date();
             maxDate.setDate(maxDate.getDate() + 7);
             $('#cycle_available_date').pickadate('picker').set('max', maxDate);
+
+            var available_from_time = $('#cycle_available_from').pickatime({
+                format: 'HH:00', // 24-hour format with only hours
+                interval: 60, // Only allow selecting hours (no minutes)
+                min: [0, 0], // Start at 00:00
+                max: [23, 0], // End at 23:00
+                clear: '', // Removes the "Clear" button
+
+                onSet: function (context) {
+                    if (context.select) {
+                        // console.log('selected');
+                        // document.getElementById("cycle_available_from").disabled = true;
+                    }
+                }
+            }).pickatime('picker');
+
+            var available_to_time = $('#cycle_available_to').pickatime({
+                format: 'HH:00', // 24-hour format with only hours
+                interval: 60, // Only allow selecting hours (no minutes)
+                min: [0, 0], // Start at 00:00
+                max: [23, 0], // End at 23:00
+                clear: '', // Removes the "Clear" button
+            }).pickatime('picker');
+
+            $('#cycle_available_to').click(function() {
+                var selectedTime = available_from_time.get('select'); // Get selected time from available_from_time
+
+                if (selectedTime) {
+                    var selectedHour = selectedTime.hour; // Extract hour
+                    available_to_time.set('min', [selectedHour, 0]); // Set new min value
+                }
+            });
 
             $('body').on('click','.rent_your_cycle',function () {
                 $('#add_cycle_modal_form').modal('show');
@@ -373,12 +406,11 @@
                     }).then(function(confirm) {
                         console.log('Form Hit');
                         if(confirm){
+                            console.log('form',form)
                             $(form).find('button[type=submit]').attr('disabled', 'disabled');
-                            // $('#assign_pickup_request_ids').val(selected_rows);
                             form.submit();
                         }
                         $(form).find('button[type=submit]').attr('disabled', false);
-
                     });
                 }
             });

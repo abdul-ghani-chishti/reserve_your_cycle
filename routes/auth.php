@@ -39,6 +39,10 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
 
+    Route::get('/dashboard', function () {
+        return view('user.welcome_user');
+    })->name('dashboard');
+
     Route::prefix('cycle_info')->name('cycle_info.')->group(function () {
         Route::post('add_cycle_modal_form', [CycleInfoController::class, 'cycle_info'])->name('add_cycle_modal_form');
     });
