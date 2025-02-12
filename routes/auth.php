@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\CycleInfoController;
+use App\Http\Controllers\Auth\DashboardController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\Auth\NewPasswordController;
@@ -37,14 +38,19 @@ Route::middleware('guest')->group(function () {
                 ->name('password.store');
 });
 
+// users -> having by cycle/not having by-cycle
 Route::middleware('auth')->group(function () {
 
     Route::get('/dashboard', function () {
         return view('user.welcome_user');
     })->name('dashboard');
 
+    Route::prefix('dashboard')->name('dashboard.')->group(function () {
+        Route::get('/', [DashboardController::class, 'index'])->name('index');
+    });
+
     Route::prefix('cycle_info')->name('cycle_info.')->group(function () {
-        Route::post('add_cycle_modal_form', [CycleInfoController::class, 'cycle_info'])->name('add_cycle_modal_form');
+        Route::post('add_cycle_modal_form', [CycleInfoController::class, 'add_cycle_info'])->name('add_cycle_modal_form');
     });
 
     Route::get('verify-email', EmailVerificationPromptController::class)

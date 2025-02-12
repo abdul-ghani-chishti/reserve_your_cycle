@@ -33,7 +33,7 @@ class AuthenticatedSessionController extends Controller
 
         session($user_info_details);
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        return redirect()->intended(route('dashboard.index', absolute: false));
     }
 
     /**

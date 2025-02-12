@@ -256,7 +256,7 @@
                     </button>
                 </div>
                 <div class="modal-body text-center">
-                    <form id="add_cycle_modal_form" action="{{route('cycle_info.add_cycle_modal_form')}}" method="post" class="form-horizontal mb-1 justify-content-center"
+                    <form id="add_cycle_modal_form" action="{{route('cycle_info.add_cycle_modal_form')}}" method="post" enctype="multipart/form-data" class="form-horizontal mb-1 justify-content-center"
                           novalidate="novalidate">
                             {{ csrf_field() }}
                         <div class="row justify-content-center">
@@ -289,13 +289,17 @@
                                        placeholder="Cycle Available To">
                             </div>
                             <div class="form-group col-5">
+                                <input type="file" name="cycle_images[]" id="cycle_images" class="form-control cycle_images"
+                                       placeholder="Select Images" multiple>
+                            </div>
+                            <div class="form-group col-5">
                                 <input type="text" name="cycle_available_date" id="cycle_available_date" class="form-control cycle_available_date"
                                        placeholder="Cycle Available Date">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <button type="submit" class="btn btn-primary piece_confirm" id="piece_confirm">Confirm
+                            <button type="submit" class="btn btn-primary" id="">Confirm
                             </button>
                         </div>
                     </form>
