@@ -35,13 +35,16 @@ class CycleInfoController extends Controller
         }
 
         //registering a cycle
+        $available_date = Carbon::createFromFormat('d F, Y', $request->cycle_available_date)->format('Y-m-d H:i:s');
+
         $cycle_info = new CycleInfo();
         $cycle_info->owner_id = auth()->id();
         $cycle_info->brand = $request->cycle_brand_name;
         $cycle_info->type = $request->cycle_type;
         $cycle_info->model = $request->cycle_model;
-        $cycle_info->quality = $request->cycle_quality;
+        $cycle_info->sku = $request->cycle_sku;
         $cycle_info->description = $request->cycle_description;
+        $cycle_info->available_date = $available_date;
         $cycle_info->save();
 
         foreach ($uploadedImages as $imagePath) {
@@ -57,15 +60,12 @@ class CycleInfoController extends Controller
         $to_hour = Carbon::createFromFormat('H:i', $to_hour)->hour;
         $total_hour = abs($from_hour - $to_hour);
 
-        $available_date = Carbon::createFromFormat('d F, Y', $request->cycle_available_date)->format('Y-m-d H:i:s');
-
         //registering hours
         foreach ($hours_range as $hour)
         {
             $cycle_availabilities = new CycleAvailability();
             $cycle_availabilities->cycle_id = $cycle_info->id;
             $cycle_availabilities->owner_id = auth()->id();
-            $cycle_availabilities->available_date = $available_date;
             $cycle_availabilities->available_hours = $hour;
             $cycle_availabilities->save();
         }
@@ -73,9 +73,15 @@ class CycleInfoController extends Controller
         return redirect()->back()->with('success', 'Your cycle has been registered');
     }
 
-    public function cycle_catalog()
+    public function show_cycle_details($id)
     {
-        $cycles = CycleInfo::with('images')->get();
-        dd($cycles);
+        $cycle_id = $id;
+        $cycles = CycleInfo::with('cycle_images')->findOrFail($id)->toArray();
+        $cycle_images = $cycles['cycle_images'];
+        $cycles_availabilities = CycleAvailability::where('cycle_id',$id)->get(['id','available_hours','cycle_availability_status_id']);
+
+        //        dd($cycles_availabilities->pluck('id'),$cycles_availabilities->pluck('available_hours'));
+        return view('user.cycle.show_cycle_details')
+            ->with(['cycle_id'=> $id,'cycles' => $cycles, 'cycle_images' => $cycle_images,'cycles_availabilities' => $cycles_availabilities]);
     }
 }

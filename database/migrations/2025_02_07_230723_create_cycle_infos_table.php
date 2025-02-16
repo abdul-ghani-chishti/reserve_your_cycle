@@ -19,7 +19,8 @@ return new class extends Migration
             $table->string('description');
             $table->string('type');
             $table->string('model');
-            $table->string('quality');
+            $table->string('cycle_sku');
+            $table->timestamps('available_date');
             $table->timestamps();
         });
     }

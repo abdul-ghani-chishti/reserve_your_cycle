@@ -41,9 +41,9 @@ Route::middleware('guest')->group(function () {
 // users -> having by cycle/not having by-cycle
 Route::middleware('auth')->group(function () {
 
-    Route::get('/dashboard', function () {
-        return view('user.welcome_user');
-    })->name('dashboard');
+//    Route::get('/dashboard', function () {
+//        return view('user.welcome_user');
+//    })->name('dashboard');
 
     Route::prefix('dashboard')->name('dashboard.')->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('index');
@@ -51,6 +51,7 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('cycle_info')->name('cycle_info.')->group(function () {
         Route::post('add_cycle_modal_form', [CycleInfoController::class, 'add_cycle_info'])->name('add_cycle_modal_form');
+        Route::get('show_cycle_details/{id}', [CycleInfoController::class, 'show_cycle_details'])->name('show_cycle_details');
     });
 
     Route::get('verify-email', EmailVerificationPromptController::class)

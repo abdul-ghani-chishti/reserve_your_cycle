@@ -13,4 +13,9 @@ class CycleInfo extends Model
     {
         return $this->hasMany(CycleImage::class, 'cycle_id');
     }
+
+    public function cycle_availabilities()
+    {
+        return $this->hasMany(CycleAvailability::class,'cycle_id');
+    }
 }

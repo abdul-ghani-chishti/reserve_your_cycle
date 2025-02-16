@@ -17,7 +17,6 @@ return new class extends Migration
             $table->integer('owner_id')->index(); //user_id
             $table->integer('user_id')->nullable()->default(NULL)->index(); //user_id -> who booked the cycle
             $table->integer('cycle_availability_status_id')->default(0); // available
-            $table->timestamp('available_date');
             $table->time('available_hours');
             $table->timestamps();
         });
