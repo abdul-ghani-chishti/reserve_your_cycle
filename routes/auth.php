@@ -38,12 +38,8 @@ Route::middleware('guest')->group(function () {
                 ->name('password.store');
 });
 
-// users -> having by cycle/not having by-cycle
+// users -> 1 having by cycle/ 0 not having by-cycle, auth is for user (1/0)
 Route::middleware('auth')->group(function () {
-
-//    Route::get('/dashboard', function () {
-//        return view('user.welcome_user');
-//    })->name('dashboard');
 
     Route::prefix('dashboard')->name('dashboard.')->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('index');

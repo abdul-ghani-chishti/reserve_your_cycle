@@ -381,32 +381,13 @@
                                                             </div>
                                                         </div>
                                                         <div class="card-footer">
-                                                            <span class="float-right">Available Date: {{\Carbon\Carbon::parse($cycle_info['available_date'])->toDateString()}}</span>
+                                                            <span class="float-right">Available Date: {{$cycle_info['brand']}}</span>
 {{--                                                            <span><i class=""></i>75 Friends</span>--}}
                                                         </div>
                                                     </div>
                                                 </div>
                                                 </a>
                                             @endforeach
-                                            <div class="col-sm-6 col-md-4 col-lg-3 mt-4 card_border">
-                                                <div class="card mt-2">
-                                                    <img class="card-img-top" src="https://picsum.photos/200/150/?random
-">
-                                                    <div class="card-block">
-                                                        <h4 class="card-title">Tawshif Ahsan Khan Last</h4>
-                                                        <div class="meta">
-                                                            <a href="#">Friends</a>
-                                                        </div>
-                                                        <div class="card-text">
-                                                            Tawshif is a web designer living in Bangladesh.
-                                                        </div>
-                                                    </div>
-                                                    <div class="card-footer">
-                                                        <span class="float-right">Joined in 2013</span>
-                                                        <span><i class=""></i>75 Friends</span>
-                                                    </div>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                             @endif
@@ -421,7 +402,10 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="delivered_shipments_modal_title">Add Cycle Details</h4>
+                    @if($cycle_available)
+                    <h4 class="modal-title" id="delivered_shipments_modal_title">Add Cycle Details | Already Have an Active Cycle</h4>
+                    @endif
+                        <h4 class="modal-title" id="delivered_shipments_modal_title">Add Cycle Details</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -589,6 +573,35 @@
                     });
                 }
             });
+
+            let cycle_available = '{{$cycle_available}}'
+            console.log(cycle_available);
+            if (cycle_available == 1)
+            {
+                console.log('exist')
+                document.getElementById('cycle_brand_name').readOnly = true;
+                document.getElementById('cycle_type').readOnly = true;
+                document.getElementById('cycle_model').readOnly = true;
+                document.getElementById('cycle_sku').readOnly = true;
+                document.getElementById('cycle_description').readOnly = true;
+                document.getElementById('cycle_images').disabled = true;
+                document.getElementById('cycle_available_from').readOnly = false;
+                document.getElementById('cycle_available_to').readOnly = false;
+                document.getElementById('cycle_available_date').readOnly = false;
+
+                function input_click(e)
+                {
+                    e.stopPropagation();
+                    return false;
+                }
+            }
+            else
+            {
+                console.log('not_exist')
+                document.getElementById('cycle_available_from').readOnly = false;
+                document.getElementById('cycle_available_to').readOnly = false;
+                document.getElementById('cycle_available_date').readOnly = false;
+            }
         });
     </script>
 @endsection
