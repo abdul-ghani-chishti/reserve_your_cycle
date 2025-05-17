@@ -31,12 +31,12 @@ class DashboardController extends Controller
         }
 
         if (session('user_type') == 0) {
-//            $cycles = CycleInfo::with('cycle_images')->get()->toArray();
+
             $cycles_info = CycleInfo::join('cycle_availabilities as ca','cycle_infos.id','ca.cycle_id')
-                ->select('ca.available_date',DB::raw('MIN(cycle_infos.id) as cycle_info_id'),DB::raw('cycle_infos.brand as cycle_brand'))
+                ->select('ca.available_date')
                 ->groupBy('ca.available_date')
                 ->get();
-            dd($cycles_info);
+//                dd($cycles_info->toArray());
             return view('user.welcome_user')
                 ->with(['user_type' => session('user_type'),
                     'cycle_infos' => $cycles_info, 'cycle_available' =>null]);

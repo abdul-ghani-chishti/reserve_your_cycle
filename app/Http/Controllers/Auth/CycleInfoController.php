@@ -8,6 +8,7 @@ use App\Models\CycleImage;
 use App\Models\CycleInfo;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Label84\HoursHelper\Facades\HoursHelper;
 
 
@@ -111,14 +112,68 @@ class CycleInfoController extends Controller
 
     public function show_cycle_details($id)
     {
-        $cycle_id = $id;
-        $cycles = CycleInfo::with('cycle_images')->findOrFail($id)->toArray();
-        $cycle_images = $cycles['cycle_images'];
-        $cycles_availabilities = CycleAvailability::where('cycle_id', $id)
-            ->get(['id', 'available_hours', 'cycle_availability_status_id']);
+        $cycle_available_date = $id;
+
+        $cycle_availabilities = CycleAvailability::where('available_date', $cycle_available_date)
+            ->get();
+        $result = [];
+
+        foreach ($cycle_availabilities as $availability) {
+            $cycleId = $availability->cycle_id;
+
+            // If this cycle_id doesn't exist in the result array yet, create it
+            if (!isset($result[$cycleId])) {
+                $cycle_info_new = CycleAvailability::join('cycle_infos as ci', 'ci.id', 'cycle_availabilities.cycle_id')
+                    ->join('cycle_images as cis','cycle_availabilities.cycle_id','cis.id')
+                    ->where('cycle_availabilities.available_date', $cycle_available_date)
+                    ->where('cycle_availabilities.cycle_id', $cycleId)
+                    ->groupBy(['cycle_availabilities.cycle_id', 'cycle_availabilities.available_date'])
+                    ->select('ci.*','cycle_availabilities.available_date','cis.*')
+                    ->get()
+                    ->toArray();
+
+                $result[$cycleId] = [
+                    'cycle_id' => $cycleId,
+                    'cycle_details' => $cycle_info_new,
+                    'available_hours' => [],
+                ];
+            }
+
+            $result[$cycleId]['available_hours'][$availability->id] = $availability->available_hours;
+        }
+        $cycle_info['hours'] = $result;
 
         return view('user.cycle.show_cycle_details')
-            ->with(['cycle_id' => $id, 'cycles' => $cycles, 'cycle_images' => $cycle_images,
-                'cycles_availabilities' => $cycles_availabilities]);
+            ->with(['available_date'=>$cycle_available_date,'cycle_infos' => $cycle_info,'available_hours'=>$result]);
+    }
+
+    public function show_cycle_details_hours($cycle_id,$available_date)
+    {
+        $available_hours = CycleAvailability::where('cycle_id',$cycle_id)
+            ->where('available_date',$available_date)
+            ->where('cycle_availability_status_id',0)
+            ->get()->toArray();
+        return view('user.cycle.show_cycle_hours')->with(['available_hours'=>$available_hours,'available_date'=>$available_date]);
+    }
+
+    public function reserve_available_hours_form(Request $request)
+    {
+        if(empty($request->reserve_available_hours_ids))
+        {
+            return redirect()->back()->with('error', 'Please select available Hours !!!');
+        }
+        $available_date = $request->available_date;
+        $reserve_available_hours_ids = $request->reserve_available_hours_ids;
+
+        foreach ($reserve_available_hours_ids as $reserve_available_hours_id) {
+            $cycle_availablity = CycleAvailability::find($reserve_available_hours_id);
+            if ($cycle_availablity) {
+                // check if all the available hours are reserved then cycle_info status should update also.
+                $cycle_availablity->cycle_availability_status_id = 2;
+                $cycle_availablity->user_id = auth()->id();
+                $cycle_availablity->save();
+            }
+        }
+        return redirect()->back()->with('success', 'You Reserved Your Hours !!!');
     }
 }

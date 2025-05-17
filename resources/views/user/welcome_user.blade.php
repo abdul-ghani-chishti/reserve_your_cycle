@@ -364,28 +364,16 @@
                                     <div class="container">
                                         <div class="row">
                                             @foreach($cycle_infos as $cycle_info)
-                                                <a href="{{ route('cycle_info.show_cycle_details', ['id' => $cycle_info['id']]) }}" class="text-decoration-none text-dark">
-                                                <div class="col-sm-6 col-md-4 col-lg-3 mt-4 card_border justify-content-start">
-                                                    <div class="card mt-2">
-                                                        <img class="card-img-top" src="https://picsum.photos/200/150/?random
-">
-                                                        <div class="card-block">
-                                                            <p class="">Brand Name: {{$cycle_info['brand']}}</p>
-                                                            <p class="">Model: {{$cycle_info['model']}}</p>
-                                                            <p class="">Type: {{$cycle_info['type']}}</p>
-                                                            <div class="meta">
-                                                                <a href="#">Friends</a>
+                                                <a href="{{ route('cycle_info.show_cycle_details', ['date' => $cycle_info['available_date']]) }}" class="text-decoration-none text-dark">
+                                                    <div class="col-sm-6 col-md-4 col-lg-3 mt-4 card_border justify-content-start">
+                                                        <div class="card mt-2">
+                                                            <div class="card-block">
+                                                                <div class="meta">
+                                                                    <a href="{{ route('cycle_info.show_cycle_details', ['date' => $cycle_info['available_date']]) }}">Available Date : {{$cycle_info['available_date']}}</a>
+                                                                </div>
                                                             </div>
-                                                            <div class="card-text">
-                                                                Description: {{$cycle_info['description']}}
-                                                            </div>
-                                                        </div>
-                                                        <div class="card-footer">
-                                                            <span class="float-right">Available Date: {{$cycle_info['brand']}}</span>
-{{--                                                            <span><i class=""></i>75 Friends</span>--}}
                                                         </div>
                                                     </div>
-                                                </div>
                                                 </a>
                                             @endforeach
                                         </div>

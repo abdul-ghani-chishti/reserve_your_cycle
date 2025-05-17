@@ -320,45 +320,43 @@
                 <div class="card">
                     <div class="card-content text-center">
                         <div class="card-body">
-                            <h1 class="">You are viewing cycle For : {{$available_date}} </h1>
-
-                            <div class="row">
-                                @foreach($cycle_infos['hours'] as $cycle_info)
-                                    <div class="column card_border">
-                                        <a href="{{route('cycle_info.show_cycle_details_hours',['cycle_id'=> $cycle_info['cycle_id'],'available_date' => $available_date])}}">
-                                            <p>Cycle Brand: {{$cycle_info['cycle_details'][0]['brand']}}</p>
-                                            <p>Cycle Type: {{$cycle_info['cycle_details'][0]['type']}}</p>
-                                            <p>Cycle Model: {{$cycle_info['cycle_details'][0]['model']}}</p>
-                                            <p>Cycle SKU: {{$cycle_info['cycle_details'][0]['sku']}}</p>
-                                            <img src="{{asset($cycle_info['cycle_details'][0]['cycle_image_path'])}}"
-                                                 class="myFunction"
-                                                 alt="Nature" style="width:100%">
-                                            <label class="text-bold mt-3">Available Hours</label><br>
-                                            @foreach($cycle_info['available_hours'] as $key => $hours)
-                                                <label>
-                                                    <input type="checkbox" name="available_hours[]"
-                                                           value="{{$key}}">
-                                                    <span>{{ $hours }}</span>
+                            <h1 class="mb-5">You Are Viewing Available Hours For : {{$available_date}}</h1>
+                            <form id="reserve_available_hours_form"
+                                  action="{{route('cycle_info.reserve_available_hours_form')}}"
+                                  method="post" class="form-horizontal mb-1 justify-content-center"
+                                  novalidate="novalidate">
+                                {{ csrf_field() }}
+                                <input name="available_date" value="{{$available_date}}" class="display-hidden">
+                                <div class="form-group">
+                                    <label class="text-bold" for="radios">Available Hours</label>
+                                    <div class="">
+                                        <div class="radio">
+                                            @foreach($available_hours as $available_hour)
+                                                <label for="radios-0">
+                                                    <input type="checkbox" name="reserve_available_hours_ids[]"
+                                                           id="reserve_available_hours_id"
+                                                           value={{$available_hour['id']}}>
+                                                    {{$available_hour['available_hours']}}
                                                 </label>
                                                 <br>
                                             @endforeach
-                                        </a>
+                                        </div>
                                     </div>
-
-                                @endforeach
-                            </div>
-                            <div class="container">
-                                <span onclick="this.parentElement.style.display='none'" class="closebtn">&times;</span>
-                                <img id="expandedImg" style="width:100%">
-                                <div id="imgtext"></div>
-                            </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="">
+                                        <button type="submit" id="reserve_available_hours" class="btn btn-primary">
+                                            Reserve
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
 @endsection
 @section('css')
 
@@ -370,65 +368,6 @@
     <link rel="stylesheet" type="text/css"
           href="{{asset('app-assets/css/plugins/pickers/daterange/daterange.min.css')}}">
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            font-family: Arial;
-        }
-
-        /* The grid: Four equal columns that floats next to each other */
-        .column {
-            float: left;
-            width: 25%;
-            padding: 10px;
-        }
-
-        /* Style the images inside the grid */
-        .column img {
-            opacity: 0.8;
-            cursor: pointer;
-        }
-
-        .column img:hover {
-            opacity: 1;
-        }
-
-        /* Clear floats after the columns */
-        .row:after {
-            content: "";
-            display: table;
-            clear: both;
-        }
-
-        /* The expanding image container */
-        .container {
-            position: relative;
-            display: none;
-        }
-
-        /* Expanding image text */
-        #imgtext {
-            position: absolute;
-            bottom: 15px;
-            left: 15px;
-            color: white;
-            font-size: 20px;
-        }
-
-        /* Closable button inside the expanded image */
-        .closebtn {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            color: white;
-            font-size: 35px;
-            cursor: pointer;
-        }
-    </style>
 @endsection
 
 @section('js')
@@ -439,17 +378,4 @@
     <script src="{{asset('app-assets/vendors/js/forms/validation/jquery.validate.min.js')}}"
             type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pickadate.js/3.6.4/picker.time.js"></script>
-
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('.myFunction').click(function () {
-                console.log('clicked')
-                var expandImg = document.getElementById("expandedImg");
-                var imgText = document.getElementById("imgtext");
-                expandImg.src = img.src;
-                imgText.innerHTML = img.alt;
-                expandImg.parentElement.style.display = "block";
-            });
-        });
-    </script>
 @endsection

@@ -47,7 +47,9 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('cycle_info')->name('cycle_info.')->group(function () {
         Route::post('add_cycle_modal_form', [CycleInfoController::class, 'add_cycle_info'])->name('add_cycle_modal_form');
-        Route::get('show_cycle_details/{id}', [CycleInfoController::class, 'show_cycle_details'])->name('show_cycle_details');
+        Route::get('show_cycle_details/{date}', [CycleInfoController::class, 'show_cycle_details'])->name('show_cycle_details');
+        Route::get('show_cycle_details_hours/{cycle_id}/{available_date}', [CycleInfoController::class, 'show_cycle_details_hours'])->name('show_cycle_details_hours');
+        Route::post('reserve_available_hours_form', [CycleInfoController::class, 'reserve_available_hours_form'])->name('reserve_available_hours_form');
     });
 
     Route::get('verify-email', EmailVerificationPromptController::class)
