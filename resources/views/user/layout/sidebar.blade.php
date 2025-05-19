@@ -16,7 +16,7 @@
                 </li>
             @else
                 <li>
-                    <a href="{{route('')}}" class="menu-item">
+                    <a href="{{route('booking.user_reservation')}}" class="menu-item">
                         <i class="la la-user-plus"></i>My Reservations</a>
                 </li>
             @endif
