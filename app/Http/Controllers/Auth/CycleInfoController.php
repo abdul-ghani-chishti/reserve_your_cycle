@@ -127,6 +127,7 @@ class CycleInfoController extends Controller
         $cycle_available_date = $id;
 
         $cycle_availabilities = CycleAvailability::where('available_date', $cycle_available_date)
+            ->whereNotIn('cycle_availability_status_id',[2,3])
             ->get();
         $result = [];
 

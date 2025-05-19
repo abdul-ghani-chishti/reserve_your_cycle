@@ -320,42 +320,13 @@
                 <div class="card">
                     <div class="card-content text-center">
                         <div class="card-body">
-                            <h1 class="">You are viewing cycle For : {{$available_date}} </h1>
-                            <div class="row">
-                                @foreach($cycle_infos['hours'] as $cycle_info)
-                                    <div class="column card_border">
-                                        <a href="{{route('cycle_info.show_cycle_details_hours',['cycle_id'=> $cycle_info['cycle_id'],'available_date' => $available_date])}}">
-                                            <p>Cycle Brand: {{$cycle_info['cycle_details'][0]['brand']}}</p>
-                                            <p>Cycle Type: {{$cycle_info['cycle_details'][0]['type']}}</p>
-                                            <p>Cycle Model: {{$cycle_info['cycle_details'][0]['model']}}</p>
-                                            <p>Cycle SKU: {{$cycle_info['cycle_details'][0]['sku']}}</p>
-                                            <img src="{{asset($cycle_info['cycle_details'][0]['cycle_image_path'])}}"
-                                                 class="myFunction"
-                                                 alt="Nature" style="width:100%">
-                                            <label class="text-bold mt-3">Available Hours</label><br>
-                                            @foreach($cycle_info['available_hours'] as $key => $hours)
-                                                <label>
-                                                    <input type="checkbox" name="available_hours[]"
-                                                           value="{{$key}}">
-                                                    <span>{{ $hours }}</span>
-                                                </label>
-                                                <br>
-                                            @endforeach
-                                        </a>
-                                    </div>
-
-                                @endforeach
-                            </div>
-                            <div class="container">
-                                <span onclick="this.parentElement.style.display='none'" class="closebtn">&times;</span>
-                                <img id="expandedImg" style="width:100%">
-                                <div id="imgtext"></div>
-                            </div>
+                            <h1 class="">You are viewing your booking </h1>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
     </div>
 
 @endsection

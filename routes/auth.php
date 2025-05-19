@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
+use App\Http\Controllers\Auth\CycleBookingController;
 use App\Http\Controllers\Auth\CycleInfoController;
 use App\Http\Controllers\Auth\DashboardController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
@@ -56,7 +57,8 @@ Route::middleware('auth')->group(function () {
 
 
     Route::prefix('booking')->name('booking.')->group(function () {
-        Route::get('user_reservation', [CycleInfoController::class, 'user_reservation'])->name('user_reservation'); // user reservation history
+        Route::get('user_reservation', [CycleBookingController::class, 'user_reservation'])->name('user_reservation'); // user reservation history
+        Route::get('user_reservation_list', [CycleBookingController::class, 'user_reservation_list'])->name('user_reservation_list'); // user reservation history
     });
 
 
