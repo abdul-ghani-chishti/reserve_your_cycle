@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
+use App\Http\Controllers\Auth\CycleInfoController;
+use App\Http\Controllers\Auth\DashboardController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\Auth\NewPasswordController;
@@ -12,6 +14,7 @@ use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
+
     Route::get('register', [RegisteredUserController::class, 'create'])
                 ->name('register');
 
@@ -35,7 +38,24 @@ Route::middleware('guest')->group(function () {
                 ->name('password.store');
 });
 
+// users -> 1 having by cycle/ 0 not having by-cycle, auth is for user (1/0)
 Route::middleware('auth')->group(function () {
+
+    Route::prefix('dashboard')->name('dashboard.')->group(function () {
+        Route::get('/', [DashboardController::class, 'index'])->name('index');
+    });
+
+    Route::prefix('cycle_info')->name('cycle_info.')->group(function () {
+        Route::post('add_cycle_modal_form', [CycleInfoController::class, 'add_cycle_modal_form'])->name('add_cycle_modal_form');
+        Route::get('deactivate_cycle', [CycleInfoController::class, 'deactivate_cycle'])->name('deactivate_cycle');
+        Route::get('activate_cycle', [CycleInfoController::class, 'activate_cycle'])->name('activate_cycle');
+        Route::get('show_cycle_details/{date}', [CycleInfoController::class, 'show_cycle_details'])->name('show_cycle_details');
+        Route::get('show_cycle_details_hours/{cycle_id}/{available_date}', [CycleInfoController::class, 'show_cycle_details_hours'])->name('show_cycle_details_hours');
+        Route::post('reserve_available_hours_form', [CycleInfoController::class, 'reserve_available_hours_form'])->name('reserve_available_hours_form');
+    });
+
+
+
     Route::get('verify-email', EmailVerificationPromptController::class)
                 ->name('verification.notice');
 

@@ -2,6 +2,19 @@
     <form method="POST" action="{{ route('register') }}">
         @csrf
 
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="have_cycle">Have a cycle
+                    <span class="danger" style="color: red">*</span>
+                </label>
+
+                <select name="have_cycle" id="have_cycle" class="select2 form-control required">
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
+                </select>
+            </div>
+        </div>
+
         <!-- Name -->
         <div>
             <x-input-label for="name" :value="__('Name')" />
