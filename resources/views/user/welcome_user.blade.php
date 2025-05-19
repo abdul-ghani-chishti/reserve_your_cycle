@@ -339,17 +339,32 @@
                                                                 <span class="ql_top"></span>
                                                                 <span class="ql_bottom"></span>
                                                             </a>
-                                                            <a class="quicklink link3" href="#">
+                                                            @if($cycle_available)
+                                                                <a class="quicklink link3" href="{{route('cycle_info.deactivate_cycle')}}">
                                                                 <span class="ql_caption">
                                                                     <span class="outer">
                                                                         <span class="inner">
-                                                                            <h2>Deactivate </h2>
+                                                                            <h2>Deactivate</h2>
                                                                         </span>
                                                                     </span>
                                                                 </span>
-                                                                <span class="ql_top"></span>
-                                                                <span class="ql_bottom"></span>
-                                                            </a>
+                                                                    <span class="ql_top"></span>
+                                                                    <span class="ql_bottom"></span>
+                                                                </a>
+                                                            @endif
+                                                            @if(!$cycle_available)
+                                                                <a class="quicklink link3" href="{{route('cycle_info.activate_cycle')}}">
+                                                                <span class="ql_caption">
+                                                                    <span class="outer">
+                                                                        <span class="inner">
+                                                                            <h2>Activate</h2>
+                                                                        </span>
+                                                                    </span>
+                                                                </span>
+                                                                    <span class="ql_top"></span>
+                                                                    <span class="ql_bottom"></span>
+                                                                </a>
+                                                            @endif
                                                             <div class="clear"></div>
                                                         </div>
                                                     </div>
@@ -391,9 +406,10 @@
             <div class="modal-content">
                 <div class="modal-header">
                     @if($cycle_available)
-                    <h4 class="modal-title" id="delivered_shipments_modal_title">Add Cycle Details | Already Have an Active Cycle</h4>
-                    @endif
+                    <h4 class="modal-title" id="delivered_shipments_modal_title">Add Hours | Already Have an Active Cycle</h4>
+                    @else
                         <h4 class="modal-title" id="delivered_shipments_modal_title">Add Cycle Details</h4>
+                    @endif
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>

@@ -6,7 +6,9 @@ use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\Auth\RegisteredUserController;
 use Illuminate\Support\Facades\Route;
 
+// link: admin/login
 Route::prefix('admin')->middleware('guest:admin')->group(function () {
+
     Route::get('register', [RegisteredUserController::class, 'create'])->name('admin.register');
     Route::post('register', [RegisteredUserController::class, 'store']);
 

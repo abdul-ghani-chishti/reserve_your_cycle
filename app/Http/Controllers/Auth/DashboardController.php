@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\CycleAvailability;
 use App\Models\CycleInfo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -13,7 +14,7 @@ class DashboardController extends Controller
     {
         if (session('user_type') == 1)
         {
-            $check_active_cycle = CycleInfo::where('owner_id',auth()->id())->where('cycle_status_id',1);
+            $check_active_cycle = CycleInfo::where('owner_id',auth()->id())->where('cycle_status_id',1); //1 is available
 
             if ($check_active_cycle->exists())
             {
@@ -32,14 +33,16 @@ class DashboardController extends Controller
 
         if (session('user_type') == 0) {
 
-            $cycles_info = CycleInfo::join('cycle_availabilities as ca','cycle_infos.id','ca.cycle_id')
+            $cycles_infos = CycleInfo::join('cycle_availabilities as ca','cycle_infos.id','ca.cycle_id')
+                ->where('cycle_infos.cycle_status_id','!=',3) // unavailable
+                ->where('ca.cycle_availability_status_id','!=',2) // reserved
                 ->select('ca.available_date')
                 ->groupBy('ca.available_date')
                 ->get();
-//                dd($cycles_info->toArray());
+
             return view('user.welcome_user')
                 ->with(['user_type' => session('user_type'),
-                    'cycle_infos' => $cycles_info, 'cycle_available' =>null]);
+                    'cycle_infos' => $cycles_infos, 'cycle_available' =>null]);
         }
     }
 }

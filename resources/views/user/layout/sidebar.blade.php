@@ -9,9 +9,17 @@
             </li>
         </ul>
         <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
-            <li>
-                <a href="" class="menu-item">
-                    <i class="la la-user-plus"></i>My Reservations</a></li>
+            @if(session('user_type') == 1)
+                <li>
+                    <a href="" class="menu-item">
+                        <i class="la la-user-plus"></i>Reservations</a>
+                </li>
+            @else
+                <li>
+                    <a href="{{route('')}}" class="menu-item">
+                        <i class="la la-user-plus"></i>My Reservations</a>
+                </li>
+            @endif
             <li>
                 <a href="" class="menu-item">
                     <i class="la la-user-plus"></i>Notifications</a></li>

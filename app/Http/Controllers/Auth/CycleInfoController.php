@@ -14,7 +14,7 @@ use Label84\HoursHelper\Facades\HoursHelper;
 
 class CycleInfoController extends Controller
 {
-    public function add_cycle_info(Request $request)
+    public function add_cycle_modal_form(Request $request)
     {
         $message_bit = null;
         $from_hour = $request->cycle_available_from;
@@ -110,6 +110,18 @@ class CycleInfoController extends Controller
             return redirect()->back()->with('success', 'Your Cycle Has Been Registered !!!');
     }
 
+    public function deactivate_cycle(Request $request)
+    {
+        CycleInfo::where('owner_id',auth()->id())->update(['cycle_status_id'=>3]);
+        return redirect()->back()->with('success', 'You deactivated your cycle !!!');
+    }
+
+    public function activate_cycle(Request $request)
+    {
+        CycleInfo::where('owner_id',auth()->id())->update(['cycle_status_id'=>1]);
+        return redirect()->back()->with('success', 'You activated your cycle !!!');
+    }
+
     public function show_cycle_details($id)
     {
         $cycle_available_date = $id;
@@ -124,22 +136,26 @@ class CycleInfoController extends Controller
             // If this cycle_id doesn't exist in the result array yet, create it
             if (!isset($result[$cycleId])) {
                 $cycle_info_new = CycleAvailability::join('cycle_infos as ci', 'ci.id', 'cycle_availabilities.cycle_id')
-                    ->join('cycle_images as cis','cycle_availabilities.cycle_id','cis.id')
+                    ->join('cycle_images as cis', 'cycle_availabilities.cycle_id', 'cis.id')
                     ->where('cycle_availabilities.available_date', $cycle_available_date)
                     ->where('cycle_availabilities.cycle_id', $cycleId)
+                    ->where('ci.cycle_status_id', '!=', 3)
                     ->groupBy(['cycle_availabilities.cycle_id', 'cycle_availabilities.available_date'])
-                    ->select('ci.*','cycle_availabilities.available_date','cis.*')
+                    ->select('ci.*', 'cycle_availabilities.available_date', 'cis.*')
                     ->get()
                     ->toArray();
 
-                $result[$cycleId] = [
-                    'cycle_id' => $cycleId,
-                    'cycle_details' => $cycle_info_new,
-                    'available_hours' => [],
-                ];
+                if (!empty($cycle_info_new)) {
+                    $result[$cycleId] = [
+                        'cycle_id' => $cycleId,
+                        'cycle_details' => $cycle_info_new,
+                        'available_hours' => [],
+                    ];
+                }
             }
-
-            $result[$cycleId]['available_hours'][$availability->id] = $availability->available_hours;
+            if (!empty($cycle_info_new)) {
+                $result[$cycleId]['available_hours'][$availability->id] = $availability->available_hours;
+            }
         }
         $cycle_info['hours'] = $result;
 
