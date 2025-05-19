@@ -55,6 +55,10 @@ Route::middleware('auth')->group(function () {
     });
 
 
+    Route::prefix('booking')->name('booking.')->group(function () {
+        Route::get('user_reservation', [CycleInfoController::class, 'user_reservation'])->name('user_reservation'); // user reservation history
+    });
+
 
     Route::get('verify-email', EmailVerificationPromptController::class)
                 ->name('verification.notice');
