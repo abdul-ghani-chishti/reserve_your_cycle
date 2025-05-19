@@ -139,7 +139,8 @@ class CycleInfoController extends Controller
                     ->join('cycle_images as cis', 'cycle_availabilities.cycle_id', 'cis.id')
                     ->where('cycle_availabilities.available_date', $cycle_available_date)
                     ->where('cycle_availabilities.cycle_id', $cycleId)
-                    ->where('ci.cycle_status_id', '!=', 3)
+                    ->where('ci.cycle_status_id', '!=', 3) // deactivated
+                    ->where('cycle_availabilities.cycle_availability_status_id', '!=', 2) // reserved
                     ->groupBy(['cycle_availabilities.cycle_id', 'cycle_availabilities.available_date'])
                     ->select('ci.*', 'cycle_availabilities.available_date', 'cis.*')
                     ->get()
