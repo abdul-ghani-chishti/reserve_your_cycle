@@ -21,42 +21,22 @@ class CycleBookingController extends Controller
     {
         $list = CycleInfo::join('cycle_availabilities as ca','ca.cycle_id','cycle_infos.id')
             ->where('ca.user_id',auth()->id())
+            ->select('cycle_infos.brand as brand','cycle_infos.type as type','cycle_infos.model as model',
+                'cycle_infos.sku as sku','cycle_infos.cycle_status_id as cycle_info_status','ca.cycle_availability_status_id as cycle_availability_status','ca.available_date as available_date',
+                'ca.available_hours as available_hours')
             ->get();
 
         return Datatables::of($list)
-            ->editColumn('status', function ($routes) {
-                return ($routes->status == 0) ? 'Inactive' : 'Active';
-            })
-            ->filterColumn('status', function ($query, $keyword) {
-                $keyword = strtolower($keyword);
-
-                if (strpos('active', $keyword) !== false) {
-                    $query->where('routes.status', '=', 1);
-                } else if (strpos('inactive', $keyword) !== false) {
-                    $query->where('routes.status', '=', 0);
-                } else {
-                    $query->whereRaw('false');
-                }
+            ->editColumn('cycle_availability_status', function ($status) {
+//                dd($status->cycle_availability_status);
+                return ($status->cycle_availability_status == 2) ? 'Reserved' : 'Active';
             })
             ->addColumn("action", function ($result) {
-                if (session('role_id') == 1 || count(array_intersect([94, 95], session('permissions'))) !== 0) {
                     $dropdown = '
                       <div class="btn-group">
                         <button type="button" class="btn btn-sm btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Actions</button>
                         <div class="dropdown-menu dropdown-menu-sm">
                     ';
-
-                    if (session('role_id') == 1 || in_array(94, session('permissions'))) {
-                        $dropdown .= '<button type="button" class="dropdown-item update_route" data-target-id=' . $result->id . ' rel="#" data-toggle="modal" data-target="#"><div class="row no-gutters align-items-center"><div class="col-2"><i class="ft-plus-circle"></i></div><div class="col-9 offset-1">Update Route</div></button>';
-                    }
-
-                    if (session('role_id') == 1 || in_array(95, session('permissions'))) {
-                        if ($result->status == 1) {
-                            $dropdown .= '<button type="button" class="dropdown-item deactivate" data-target-id=' . $result->id . ' rel="routeInactive"><div class="row no-gutters align-items-center"><div class="col-2"><i class="ft-plus-circle"></i></div><div class="col-9 offset-1">Deactivate Route</div></button>';
-                        } else {
-                            $dropdown .= '<button type="button" class="dropdown-item deactivate" data-target-id=' . $result->id . ' rel="routeActive"><div class="row no-gutters align-items-center"><div class="col-2"><i class="ft-plus-circle"></i></div><div class="col-9 offset-1">Activate Route</div></button>';
-                        }
-                    }
                     $dropdown .= '<button type="button" class="dropdown-item assign_location" data-target-id=' . $result->id . ' rel="assignlocation" ><div class="row no-gutters align-items-center"><div class="col-2"><i class="ft-plus-circle"></i></div><div class="col-9 offset-1">Assign Shipper</div></button>';
 
                     $dropdown .= '<button type="button" class="dropdown-item view_location" data-target-id=' . $result->id . ' rel="assignlocation" ><div class="row no-gutters align-items-center"><div class="col-2"><i class="ft-plus-circle"></i></div><div class="col-9 offset-1">View Pickup Addresses </div></button>';
@@ -65,11 +45,7 @@ class CycleBookingController extends Controller
                         </div>
                       </div>
                     ';
-
                     return $dropdown;
-                } else {
-                    return '';
-                }
             })
             ->make(true);
 
