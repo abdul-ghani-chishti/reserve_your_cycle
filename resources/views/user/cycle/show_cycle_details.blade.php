@@ -335,13 +335,14 @@
                                             <label class="text-bold mt-3">Available Hours</label><br>
                                             @foreach($cycle_info['available_hours'] as $key => $hours)
                                                 <label>
-                                                    <input type="checkbox" name="available_hours[]"
-                                                           value="{{$key}}">
+{{--                                                    <input type="checkbox" name="available_hours[]"--}}
+{{--                                                           value="{{$key}}">--}}
                                                     <span>{{ $hours }}</span>
                                                 </label>
                                                 <br>
                                             @endforeach
                                         </a>
+                                        <a href="{{route('cycle_info.show_cycle_details_hours',['cycle_id'=> $cycle_info['cycle_id'],'available_date' => $available_date])}}"><button class="btn btn-info">Next</button></a>
                                     </div>
 
                                 @endforeach

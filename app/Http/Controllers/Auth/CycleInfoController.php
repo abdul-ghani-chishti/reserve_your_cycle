@@ -169,7 +169,7 @@ class CycleInfoController extends Controller
     {
         $available_hours = CycleAvailability::where('cycle_id',$cycle_id)
             ->where('available_date',$available_date)
-            ->where('cycle_availability_status_id',0)
+            ->where('cycle_availability_status_id',1)
             ->get()->toArray();
         return view('user.cycle.show_cycle_hours')->with(['available_hours'=>$available_hours,'available_date'=>$available_date]);
     }
