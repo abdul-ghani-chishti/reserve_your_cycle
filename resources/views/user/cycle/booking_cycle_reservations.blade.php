@@ -111,30 +111,13 @@
                     var td = '<td style="padding:5px;" class="border-primary border-lighten-2"><fieldset class="form-group m-0 position-relative has-icon-right"></fieldset></td>';
                     var input = '<input type="text" class="form-control form-control-sm input-sm primary">';
                     var icon = '<div class="form-control-position primary"><i class="la la-search"></i></div>';
-                    var status_select = '<select name="status_select" id="status_select" class="select2 form-control">' +
-                        '<option value="0">Inactive</option>' +
-                        '<option value="1">Active</option>' +
-                        '</select>';
-                    var route_type = '<select name="route_type" id="route_type" class="select2 form-control">' +
-                        '<option value="1">Pickup</option>' +
-                        '<option value="2">Delivery</option>' +
-                        '</select>';
+
                     this.api().columns().every(function (column_id) {
                         var column = this;
                         var header = column.header();
 
                         if ($(header).is('.serial_number') || $(header).is('.action')) {
                             $(td).appendTo($(search));
-                        } else if ($(header).is('.status')) {
-                            $(status_select).appendTo($(search))
-                                .on('change', function () {
-                                    column.search($(this).val(), false, false, true).draw();
-                                }).wrap(td);
-                        } else if ($(header).is('.route_type')) {
-                            $(route_type).appendTo($(search))
-                                .on('change', function () {
-                                    column.search($(this).val(), false, false, true).draw();
-                                }).wrap(td);
                         } else {
                             var current = $(input).appendTo($(search)).on('change', function () {
                                 column.search($(this).val(), false, false, true).draw();
@@ -145,14 +128,32 @@
                             }
                         }
                     });
-                    $("#status_select").prepend('<option value="" selected></option>').select2({
-                        placeholder: "Select Status",
-                        width: '100%',
-                        containerCssClass: 'select-xs',
-                        dropdownCssClass: 'form-control-sm p-0'
-                    });
 
                     this.api().table().columns.adjust();
+                }
+            });
+
+            $('#datatable tbody').on('click', 'tr td.action .btn-group .dropdown-menu .dropdown-item', function() {
+                if ($(this).hasClass('cancel_booking')) {
+                    var cycle_availability_id = $(this).data('target-id')
+
+                    $.ajax({
+                        url: '{!! route('booking.cancel_booking') !!}',
+                        method: 'POST',
+                        data: {
+                            '_token': '{{ csrf_token() }}',
+                            'cycle_availability_id': cycle_availability_id
+                        }
+                    }).done(function(data){
+                        if(data.status == 1){
+                            scan_sound(1)
+                            toastr.success(data.success, 'Success!', {positionClass: 'toast-bottom-center', containerId: 'toast-bottom-center'});
+                        }
+                        else{
+                            toastr.error(data.error, 'Error!', {positionClass: 'toast-top-center', containerId: 'toast-top-center'});
+                        }
+                        table.draw()
+                    });
                 }
             });
         });

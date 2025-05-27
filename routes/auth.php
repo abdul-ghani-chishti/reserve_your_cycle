@@ -59,6 +59,7 @@ Route::middleware('auth')->group(function () {
     Route::prefix('booking')->name('booking.')->group(function () {
         Route::get('user_reservation', [CycleBookingController::class, 'user_reservation'])->name('user_reservation'); // user reservation history
         Route::get('user_reservation_list', [CycleBookingController::class, 'user_reservation_list'])->name('user_reservation_list'); // user reservation history
+        Route::post('cancel_booking', [CycleBookingController::class, 'cancel_booking'])->name('cancel_booking'); // user reservation history
     });
 
 

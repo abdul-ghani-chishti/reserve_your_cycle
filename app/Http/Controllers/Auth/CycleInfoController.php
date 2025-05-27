@@ -171,7 +171,8 @@ class CycleInfoController extends Controller
             ->where('available_date',$available_date)
             ->where('cycle_availability_status_id',1)
             ->get()->toArray();
-        return view('user.cycle.show_cycle_hours')->with(['available_hours'=>$available_hours,'available_date'=>$available_date]);
+        return view('user.cycle.show_cycle_hours')
+            ->with(['available_hours'=>$available_hours,'available_date'=>$available_date]);
     }
 
     public function reserve_available_hours_form(Request $request)
