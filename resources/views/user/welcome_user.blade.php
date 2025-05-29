@@ -339,7 +339,7 @@
                                                                 <span class="ql_top"></span>
                                                                 <span class="ql_bottom"></span>
                                                             </a>
-                                                            @if($cycle_available)
+                                                            @if($cycle_available && $user_info)
                                                                 <a class="quicklink link3" href="{{route('cycle_info.deactivate_cycle')}}">
                                                                 <span class="ql_caption">
                                                                     <span class="outer">
@@ -351,8 +351,8 @@
                                                                     <span class="ql_top"></span>
                                                                     <span class="ql_bottom"></span>
                                                                 </a>
-                                                            @endif
-                                                            @if(!$cycle_available)
+
+                                                            @elseif(!$cycle_available && $user_info)
                                                                 <a class="quicklink link3" href="{{route('cycle_info.activate_cycle')}}">
                                                                 <span class="ql_caption">
                                                                     <span class="outer">
@@ -364,6 +364,8 @@
                                                                     <span class="ql_top"></span>
                                                                     <span class="ql_bottom"></span>
                                                                 </a>
+                                                            @elseif(!$cycle_available && !$user_info)
+
                                                             @endif
                                                             <div class="clear"></div>
                                                         </div>

@@ -14,21 +14,23 @@ class DashboardController extends Controller
     {
         if (session('user_type') == 1)
         {
-            $check_active_cycle = CycleInfo::where('owner_id',auth()->id())->where('cycle_status_id',1); //1 is available
-
+            $check_active_cycle = CycleInfo::where('owner_id',auth()->id());
+            $info = 0;
+            $cycle_avialable = 0;
             if ($check_active_cycle->exists())
-            {
-                $check_active_cycle = $check_active_cycle->get()->pluck('id','sku')->toArray();
-                $cycle_avialable = 1;
-            }else
-            {
-                $cycle_avialable = 0;
+            {   $info = 1;
+                $check_active_cycle = $check_active_cycle->where('cycle_status_id',1); // available
+                if ($check_active_cycle)
+                {
+                    $check_active_cycle = $check_active_cycle->get()->pluck('id','sku')->toArray();
+                    $cycle_avialable = 1;
+                }
             }
 
             return view('user.welcome_user')
                 ->with(['user_type' => session('user_type'),
                     'check_active_cycle' => $check_active_cycle,
-                    'cycle_available' => $cycle_avialable]);
+                    'cycle_available' => $cycle_avialable,'user_info'=>$info]);
         }
 
         if (session('user_type') == 0) {
@@ -44,5 +46,10 @@ class DashboardController extends Controller
                 ->with(['user_type' => session('user_type'),
                     'cycle_infos' => $cycles_infos, 'cycle_available' =>null]);
         }
+    }
+
+    public function about()
+    {
+        return view('user.about');
     }
 }

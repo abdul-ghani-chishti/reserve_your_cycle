@@ -17,12 +17,12 @@
             @else
                 <li>
                     <a href="{{route('booking.user_reservation')}}" class="menu-item">
-                        <i class="la la-user-plus"></i>My Reservations</a>
+                        <i class="la la-user-plus"></i>My Reservations </a>
                 </li>
             @endif
             <li>
                 <a href="" class="menu-item">
-                    <i class="la la-user-plus"></i>Notifications</a></li>
+                    <i class="la la-user-plus" ></i>Notifications <span style="font-size: 0.8em; color: blue;">(Feature)</span></a></li>
         </ul>
 {{--        <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">--}}
 {{--            <li class=" nav-item"><a href="#"><span class="menu-title" data-i18n="nav.dash.main"><i--}}
@@ -85,7 +85,7 @@
 {{--        </ul>--}}
         <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
         <li>
-            <a class="menu-item">
+            <a href="{{route('dashboard.about')}}" class="menu-item">
                 <i class="la la-user-plus"></i>About</a></li>
         </ul>
     </div>

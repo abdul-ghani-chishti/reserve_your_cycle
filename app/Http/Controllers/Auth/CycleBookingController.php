@@ -58,9 +58,30 @@ class CycleBookingController extends Controller
     public function cancel_booking(Request $request)
     {
         $id = $request->cycle_availability_id;
-        $current_time = Carbon::today()->toDateString();
-        $cancel_booking = CycleAvailability::where('id',$id)->first();
-        dd($current_time,$cancel_booking->available_date);
-        return ['status' => 1, 'success' => 'Successfully cancel this specific booking !!!'];
+        $current_date = Carbon::today()->toDateString();
+        $booking_date = CycleAvailability::where('id',$id)->first();
+
+        if($booking_date->available_date == $current_date)
+        {
+            return ['status' => 0, 'error' => 'You cannot cancel this booking because it is late now !!!'];
+        }
+        else
+        {
+            $current_date = Carbon::parse($current_date);
+            $is_date =  $current_date->lessThan($booking_date->available_date);
+
+            if ($is_date)
+            {
+                // update here
+                $booking_date->cycle_availability_status_id = 1;
+                $booking_date->user_id = null;
+                $booking_date->save();
+                return ['status' => 1, 'success' => 'Successfully Cancel Booking !!!'];
+            }
+            else
+            {
+                return ['status' => 0, 'error' => 'You cannot cancel this booking because it is now late !!!'];
+            }
+        }
     }
 }

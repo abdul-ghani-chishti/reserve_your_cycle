@@ -44,6 +44,7 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('dashboard')->name('dashboard.')->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('index');
+        Route::get('about', [DashboardController::class, 'about'])->name('about');
     });
 
     Route::prefix('cycle_info')->name('cycle_info.')->group(function () {
