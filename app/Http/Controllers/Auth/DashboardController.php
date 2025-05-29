@@ -12,7 +12,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        if (session('user_type') == 1)
+        if (session('user_type') == 1) // admin cycle
         {
             $check_active_cycle = CycleInfo::where('owner_id',auth()->id());
             $info = 0;
@@ -27,13 +27,14 @@ class DashboardController extends Controller
                 }
             }
 
-            return view('user.welcome_user')
+            return view('user.cycle_admin.welcome_cycle_admin')
                 ->with(['user_type' => session('user_type'),
                     'check_active_cycle' => $check_active_cycle,
                     'cycle_available' => $cycle_avialable,'user_info'=>$info]);
         }
 
-        if (session('user_type') == 0) {
+        if (session('user_type') == 0) // normal user without cycle
+        {
 
             $cycles_infos = CycleInfo::join('cycle_availabilities as ca','cycle_infos.id','ca.cycle_id')
                 ->where('cycle_infos.cycle_status_id','!=',3) // unavailable
