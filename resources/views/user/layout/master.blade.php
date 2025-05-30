@@ -24,7 +24,7 @@
 </div>
 {{--@include('user.components.modals')--}}
 @include('user.layout.footer')
-@include('user.layout.sonic_search')
+@include('user.layout.cycle_reservation_search')
 <audio id="audio_success" autostart="false">
     <source src="{{asset('file/success_sound.mp3')}}" type="audio/ogg">
     <source src="{{asset('file/success_sound.mp3')}}" type="audio/mpeg">
