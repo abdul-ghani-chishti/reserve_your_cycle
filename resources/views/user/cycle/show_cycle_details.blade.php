@@ -1,6 +1,6 @@
 @extends('user.layout.master')
 
-@section('title', 'Dashboard')
+@section('title', 'Cycle Details')
 <style>
 
 

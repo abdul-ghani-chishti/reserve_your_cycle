@@ -1,5 +1,5 @@
 @extends('user.layout.master')
-@section('title', 'Dashboard')
+@section('title', 'About')
 @section('content')
     <h1>Reservation History </h1>
     <section>

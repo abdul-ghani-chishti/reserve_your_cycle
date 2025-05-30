@@ -32,7 +32,7 @@
         });
         $('#search_admin_sonic').prepend('<option value="" selected="selected"></option>').select2({
             width: '100%',
-            placeholder:'Search Sonic',
+            placeholder:'Search In Cycle Reservation Portal',
             dropdownParent:$('#GlobalSearchSonicModal')
         }).bind('select2:select',function () {
             var url = $(this).val();
