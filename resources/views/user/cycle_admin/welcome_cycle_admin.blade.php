@@ -339,6 +339,9 @@
                                                             <span class="ql_bottom"></span>
                                                         </a>
                                                         @if($cycle_available && $user_info)
+                                                            <?php
+
+                                                                ?>
                                                             <a class="quicklink link3"
                                                                href="{{route('cycle_info.deactivate_cycle')}}">
                                                                 <span class="ql_caption">

@@ -20,7 +20,8 @@ class DashboardController extends Controller
             if ($check_active_cycle->exists())
             {   $info = 1;
                 $check_active_cycle = $check_active_cycle->where('cycle_status_id',1); // available
-                if ($check_active_cycle)
+//                dd($check_active_cycle);
+                if ($check_active_cycle->exists())
                 {
                     $check_active_cycle = $check_active_cycle->get()->pluck('id','sku')->toArray();
                     $cycle_avialable = 1;

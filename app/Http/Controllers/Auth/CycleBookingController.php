@@ -11,6 +11,7 @@ use Yajra\Datatables\Datatables;
 
 class CycleBookingController extends Controller
 {
+    // user - without cycle
     public function user_reservation()
     {
 //        $list = CycleInfo::join('cycle_availabilities as ca','ca.cycle_id','cycle_infos.id')
@@ -82,8 +83,7 @@ class CycleBookingController extends Controller
         }
     }
 
-    //Admin Cycle
-
+    //user - with Cycle
     public function admin_cycle_reservation()
     {
         return view('user.cycle_admin.booking_cycle_reservations');
