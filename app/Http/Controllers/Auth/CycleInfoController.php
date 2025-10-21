@@ -81,7 +81,7 @@ class CycleInfoController extends Controller
             $cycle_info->brand = $request->cycle_brand_name;
             $cycle_info->type = $request->cycle_type;
             $cycle_info->model = $request->cycle_model;
-            $cycle_info->sku = $request->cycle_sku;
+            $cycle_info->cycle_sku = $request->cycle_sku;
             $cycle_info->description = $request->cycle_description;
             $cycle_info->save();
 

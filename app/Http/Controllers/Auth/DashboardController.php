@@ -12,8 +12,10 @@ class DashboardController extends Controller
 {
     public function index()
     {
+
         if (session('user_type') == 1)
         {
+
             $check_active_cycle = CycleInfo::where('owner_id',auth()->id());
             $info = 0;
             $cycle_avialable = 0;

@@ -29,6 +29,7 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
 
         $user_info = auth()->user();
+
         $user_info_details = ['user_name' => $user_info->name,'user_id' => $user_info->id,'user_type' => $user_info->is_cycle,'user_email' => $user_info->email];
 
         session($user_info_details);

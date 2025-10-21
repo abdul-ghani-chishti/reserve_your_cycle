@@ -8,7 +8,7 @@
                     <span class="danger" style="color: red">*</span>
                 </label>
 
-                <select name="have_cycle" id="have_cycle" class="select2 form-control required">
+                <select name="have_cycle" id="have_cycle" class="select2 border rounded form-control required">
                     <option value="1">Yes</option>
                     <option value="0">No</option>
                 </select>
@@ -51,7 +51,16 @@
 
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>
-
+        <div class="mt-4">
+            <label>Chose Matriculation</label>
+            <input type="file" name="matriculation[]" id="matriculation" class="form-control matriculation"
+                   placeholder="Select Matriculation" multiple>
+        </div>
+        <div class="mt-4">
+            <label>Supporting Document</label>
+            <input type="file" name="sup_doc[]" id="sup_doc" class="form-control sup_doc"
+                   placeholder="Select Document" multiple>
+        </div>
         <div class="flex items-center justify-end mt-4">
             <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
                 {{ __('Already registered?') }}

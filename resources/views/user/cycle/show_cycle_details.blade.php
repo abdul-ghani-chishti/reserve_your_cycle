@@ -328,7 +328,7 @@
                                             <p>Cycle Brand: {{$cycle_info['cycle_details'][0]['brand']}}</p>
                                             <p>Cycle Type: {{$cycle_info['cycle_details'][0]['type']}}</p>
                                             <p>Cycle Model: {{$cycle_info['cycle_details'][0]['model']}}</p>
-                                            <p>Cycle SKU: {{$cycle_info['cycle_details'][0]['sku']}}</p>
+                                            <p>Cycle SKU: {{$cycle_info['cycle_details'][0]['cycle_sku']}}</p>
                                             <img src="{{asset($cycle_info['cycle_details'][0]['cycle_image_path'])}}"
                                                  class="myFunction"
                                                  alt="Nature" style="width:100%">

@@ -27,13 +27,20 @@
 
                 <ul class="nav navbar-nav float-right">
                     <li class="dropdown dropdown-user nav-item">
-                        <a class="nav-link d-inline-flex align-middle p-0" target="_blank">
+                        <a class="nav-link d-inline-flex align-middle p-0">
                             <div class="m-0 bg-white primary rounded custom-nav-buttons-padding">
                                 <span
-                                    class="d-inline-block d-md-none d-lg-none d-xl-inline-block align-middle font-weight-bold">Welcome {{auth()->user()->name}}</span>
-                                <h2 class="d-inline-block m-0 align-middle primary">
-{{--                                    <i class="la la-crosshairs m-0"></i>--}}
-                                </h2>
+                                    class="d-inline-block d-md-none d-lg-none d-xl-inline-block align-middle font-weight-bold">
+                                    Welcome {{auth()->user()->name}}
+                                </span>
+                            </div>
+                        </a>
+                        <a class="nav-link d-inline-flex align-middle p-0">
+                            <div class="m-0 bg-white warning rounded custom-nav-buttons-padding">
+                                <span
+                                    class="d-inline-block d-md-none d-lg-none d-xl-inline-block align-middle font-weight-bold">
+                                    Status: {{Auth::user()->status->name}}
+                                </span>
                             </div>
                         </a>
                         <a class=" nav-link d-inline-flex align-middle p-0" id="logout" target="_blank">

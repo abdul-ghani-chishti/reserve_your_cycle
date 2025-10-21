@@ -10,12 +10,17 @@ class AdminDashboardController extends Controller
 {
     public function __construct()
     {
-        //        $this->middleware('auth:admin');
+//                $this->middleware('auth:admin');
     }
 
     public function index()
     {
-        //        dd(1,session()->all(),Admin::find(auth()->id()),auth()->user());
+//        dd(1,session()->all(),Admin::find(auth()->id()),auth()->user());
         return view('admin.dashboard');
+    }
+
+    public function pending_account()
+    {
+        return view('admin.manage_user.pending_accounts');
     }
 }

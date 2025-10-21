@@ -24,7 +24,7 @@ class CycleBookingController extends Controller
         $list = CycleInfo::join('cycle_availabilities as ca','ca.cycle_id','cycle_infos.id')
             ->where('ca.user_id',auth()->id())
             ->select('ca.id as cycle_availability_id','cycle_infos.brand as brand','cycle_infos.type as type','cycle_infos.model as model',
-                'cycle_infos.sku as sku','cycle_infos.cycle_status_id as cycle_info_status',
+                'cycle_infos.cycle_sku as sku','cycle_infos.cycle_status_id as cycle_info_status',
                 'ca.cycle_availability_status_id as cycle_availability_status','ca.available_date as available_date',
                 'ca.available_hours as available_hours')
             ->get();

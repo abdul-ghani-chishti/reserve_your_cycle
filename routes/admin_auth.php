@@ -14,20 +14,18 @@ Route::prefix('admin')->middleware('guest:admin')->group(function () {
 
     Route::get('login', [LoginController::class, 'create'])->name('admin.login');
     Route::post('login', [LoginController::class, 'store']);
+
+
 });
 
-Route::prefix('admin')->middleware('auth:admin')->group(function () {
+Route::prefix('admin')->middleware('auth:admin')->name('admin.')->group(function () {
 
-    Route::post('logout', [LoginController::class, 'destroy'])->name('admin.logout');
-    Route::get('/dashboard',function (){
-     return view('admin.dashboard');
-    })->name('admin.dashboard');
+    Route::post('logout', [LoginController::class, 'destroy'])->name('logout');
 
-//    Route::prefix('dashboard')->name('dashboard.')->group(function () {
-//        Route::get('', [AdminDashboardController::class, 'index'])->name('index');
-//    });
+    Route::prefix('dashboard')->group(function () {
+        Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
+        Route::get('pending_account', [AdminDashboardController::class, 'pending_account'])->name('dashboard.pending_account');
+        Route::get('about', [AdminDashboardController::class, 'about'])->name('dashboard.about');
+    });
 
-//    Route::get('/dashboard', function () {
-//        return view('admin.dashboard');
-//    })->name('admin.dashboard');
 });
