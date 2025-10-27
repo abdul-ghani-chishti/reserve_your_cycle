@@ -15,7 +15,7 @@
                 <ul class="menu-content">
                     <li><a href="" class="menu-item">Users</a>
                     </li>
-                    <li><a href="{{route('admin.dashboard.pending_account')}}" class="menu-item">Pending Accounts</a>
+                    <li><a href="{{route('admin.manage_user.pending_account')}}" class="menu-item">Pending Accounts</a>
                     </li>
                     <li><a href="" class="menu-item">Blocked Accounts</a>
                     </li>

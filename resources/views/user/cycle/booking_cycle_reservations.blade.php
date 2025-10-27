@@ -1,5 +1,5 @@
 @extends('user.layout.master')
-@section('title', 'Dashboard')
+@section('title', 'Reservation History')
 @section('content')
     <h1>Reservation History </h1>
 <section>
@@ -63,7 +63,7 @@
                     action: function (e, dt, node, config) {
                         $('#add_route').modal('show');}},
                     ],
-                scrollX: true,
+                scrollX: false,
                 // scrollY: '500px',
                 "autoWidth": false,
                 // lengthMenu: [[50, 100, 500, 1000, -1], [50, 100, 500, 1000, 'All']],
