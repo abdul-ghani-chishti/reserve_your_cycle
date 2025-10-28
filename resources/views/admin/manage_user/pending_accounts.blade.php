@@ -15,13 +15,8 @@
                                     <th class="border-primary border-darken-1">S No.</th>
                                     <th class="border-primary border-darken-1">User Name</th>
                                     <th class="border-primary border-darken-1">Email</th>
-                                    <th class="border-primary border-darken-1">Cycle Brand</th>
-                                    <th class="border-primary border-darken-1">Cycle Type</th>
-                                    <th class="border-primary border-darken-1">Cycle Description</th>
-                                    <th class="border-primary border-darken-1">Cycle SKU</th>
-                                    <th class="border-primary border-darken-1">Cycle Model</th>
-                                    <th class="border-primary border-darken-1">Matriculation</th>
-                                    <th class="border-primary border-darken-1">Cycle Status</th>
+                                    <th class="border-primary border-darken-1">Documents</th>
+                                    <th class="border-primary border-darken-1">Status</th>
                                     <th class="border-primary border-darken-1">Request Date</th>
                                     <th class="border-primary border-darken-1"></th>
                                 </tr>
@@ -32,6 +27,34 @@
                 </div>
             </div>
         </div>
+
+        <div class="modal fade" id="documents_modal" tabindex="-1" role="dialog" aria-labelledby="documentsModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="documentsModalLabel">User Documents</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span>&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Images will load here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Zoom Modal -->
+        <div class="modal fade" id="zoomModal" tabindex="-1" role="dialog" aria-labelledby="zoomModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content bg-dark border-0">
+                    <div class="modal-body text-center p-0">
+                        <img src="" alt="Zoomed Document" class="img-fluid rounded shadow-lg" style="max-height: 140vh; width: auto;">
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </section>
 @endsection
 @section('css')
@@ -43,6 +66,16 @@
     <link rel="stylesheet" type="text/css" href="{{asset('app-assets/vendors/css/pickers/pickadate/pickadate.css')}}">
     <link rel="stylesheet" type="text/css"
           href="{{asset('app-assets/css/plugins/pickers/daterange/daterange.min.css')}}">
+
+    <style>
+        .doc-thumb {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s;
+        }
+        .doc-thumb:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+    </style>
 @endsection
 
 @section('js')
@@ -80,7 +113,7 @@
                 serverSide: true,
                 ajax: '{{ route('admin.manage_user.pending_account_list') }}',
                 rowId: 'id',
-                order: [[10, 'desc']],
+                order: [[3, 'desc']],
                 columns: [
                     {
                         data: 'id',
@@ -93,16 +126,11 @@
                             return '';
                         }
                     },
-                    {data: 'user_name', name: 'u.name', class: 'align-middle user_name'},
-                    {data: 'user_email', name: 'u.email', class: 'align-middle email'},
-                    {data: 'brand', name: 'cycle_infos.brand', class: 'align-middle brand'},
-                    {data: 'type', name: 'cycle_infos.type', class: 'align-middle type'},
-                    {data: 'description', name: 'cycle_infos.type', class: 'align-middle type'},
-                    {data: 'sku', name: 'cycle_infos.sku', class: 'align-middle sku'},
-                    {data: 'model', name: 'cycle_infos.model', class: 'align-middle model'},
-                    {data: 'matriculation', name: 'matriculation', class: 'align-middle matriculation'},
-                    {data: 'cycle_availability_status', name: 'ca.cycle_availability_status_id', class: 'align-middle cycle_availability_status'},
-                    {data: 'request_date', name: 'u.created_at', class: 'align-middle cycle_availability_status'},
+                    {data: 'user_name', name: 'users.name', class: 'align-middle user_name'},
+                    {data: 'user_email', name: 'users.email', class: 'align-middle email'},
+                    {data: 'documents', name: 'documents', class: 'align-middle show_user_documents'},
+                    {data: 'status', name: 'users.status', class: 'align-middle status'},
+                    {data: 'request_date', name: 'users.created_at', class: 'align-middle request_date'},
                     {data: 'action', name: 'action', class: 'align-middle action text-center', orderable: false, searchable: false}
                 ],
                 rowCallback: function (row, data, index) {
@@ -164,31 +192,60 @@
                 }
             });
 
-            $('body').on('click','#datatable tbody tr td.matriculation button',function () {
+            $('body').on('click', '#datatable tbody tr td.show_user_documents button', function () {
                 var id = parseInt($(this).parents('tr').attr('id'));
-                $('#total_shipments_modal .modal-body').html('');
-                $('#total_shipments_modal').modal('show');
+                console.log('Fetching documents for user:', id);
+
+                // Show loading message
+                $('#documents_modal .modal-body').html('<p class="text-center text-muted">Loading documents...</p>');
+                $('#documents_modal').modal('show');
 
                 $.ajax({
-                    url: '{!! route('admin.manage_user.pending_account_list') !!}',
+                    url: '{!! route('admin.manage_user.pending_account_show_docs') !!}',
                     method: 'POST',
                     data: {
                         '_token': '{{ csrf_token() }}',
-                        'note_id': id
-                    }
-                })
-                    .done(function(data) {
-                        if (data) {
-                            var shipments = '';
-                            if (data.booked) {
-                                $.each(data.booked, function(index, tracking_numbers) {
-                                    shipments += '<u><a href='+route+'?tracking_number='+tracking_numbers+' target="_blank">'+tracking_numbers+'</a></u><br>';
-                                });
-                            }
-                            $('#total_shipments_modal .modal-body').html(shipments);
+                        'user_id': id
+                    },
+                    success: function (data) {
+                        if (data && data.imgs && data.imgs.length > 0) {
+                            var show_documents = '<div class="d-flex flex-wrap justify-content-start gap-3">';
+
+                            $.each(data.imgs, function (index, img_path) {
+                                var fullPath = '/' + img_path; // full image path
+                                show_documents += `
+                        <div class="text-center">
+                            <img src="${fullPath}"
+                                 alt="User Document ${index + 1}"
+                                 class="img-thumbnail doc-thumb shadow-sm"
+                                 style="width: 120px; height: 120px; object-fit: cover; cursor: pointer;"
+                                 data-full="${fullPath}">
+                            <p class="mt-2 small text-muted">Document ${index + 1}</p>
+                        </div>
+                    `;
+                            });
+
+                            show_documents += '</div>';
+                            $('#documents_modal .modal-body').html(show_documents);
+
+                            // Zoom modal functionality
+                            $('.doc-thumb').on('click', function () {
+                                var fullImg = $(this).data('full');
+                                $('#zoomModal img').attr('src', fullImg);
+                                $('#zoomModal').modal('show');
+                            });
+
+                        } else {
+                            $('#documents_modal .modal-body').html('<p class="text-center text-muted">No documents found for this user.</p>');
                         }
-                    });
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error loading documents:', error);
+                        $('#documents_modal .modal-body').html('<p class="text-danger text-center">Failed to load documents.</p>');
+                    }
+                });
             });
+
         });
     </script>
 @endsection

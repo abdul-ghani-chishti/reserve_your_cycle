@@ -320,7 +320,7 @@
                 <div class="card">
                     <div class="card-content text-center">
                         <div class="card-body">
-                            @if(session('user_type') == 1)
+                            @if(session('user_type') == 1 && !in_array(session('user_status_id'),[2,3,4]))
                                 <div class="content-body">
                                     <div class="card">
                                         <div class="card-content text-center">
@@ -395,6 +395,9 @@
                                             @endforeach
                                         </div>
                                     </div>
+                            @endif
+                            @if(in_array(session('user_status_id'),[2,3,4]))
+                                    <h1 class="">Your account is under review !!!</h1>
                             @endif
                         </div>
                     </div>

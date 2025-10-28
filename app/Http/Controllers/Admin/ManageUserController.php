@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\CycleInfo;
+use App\Models\User;
+use App\Models\UserDocuments;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
@@ -15,20 +17,23 @@ class ManageUserController extends Controller
     }
     public function pending_account_list()
     {
-//        dd('list');
-        $list = CycleInfo::join('users as u','u.id','cycle_infos.owner_id')
-            ->where('u.user_status_id',1)
-            ->select('u.name as user_name','u.email as user_email','u.created_at as request_date','cycle_infos.brand as brand',
-                'cycle_infos.type as type','cycle_infos.model as model', 'cycle_infos.cycle_sku as sku',
-                'cycle_infos.cycle_status_id as cycle_info_status','cycle_infos.description')
+        $list = User::join('user_documents as ud','ud.user_id','users.id')
+            ->select('users.id as id','users.name as user_name', 'users.email as user_email', 'users.is_cycle as have_cycle',
+                'users.user_status_id as status', 'users.created_at as request_date',
+                \DB::raw('COUNT(ud.id) as document_count'))
+            ->groupBy('users.id')
             ->get();
 
         $datatable = Datatables::of($list)
-            ->editColumn('cycle_availability_status', function ($data) {
-                return ($data->cycle_availability_status == 2) ? 'Reserved' : 'Active';
+            ->editColumn('status', function ($data) {
+                if($data->status == 3)
+                    $st = 'Pending';
+                else
+                    $st = '--';
+                return $st;
             })
-            ->addColumn('matriculation', function ($data) {
-                return '<button class="btn btn-sm btn-outline-info align-middle">' . 1 . '</button>';
+            ->addColumn('documents', function ($data) {
+                return '<button class="btn btn-sm btn-outline-info align-middle">' . $data->document_count . '</button>';
             })
             ->addColumn("action", function ($result) {
                 $dropdown = '
@@ -45,7 +50,16 @@ class ManageUserController extends Controller
                       </div>
                     ';
                 return $dropdown;
-            });
+            })
+            ->rawColumns(['documents', 'action']);
         return $datatable->make(true);
+    }
+
+    public function pending_account_show_docs(Request $request)
+    {
+        $id = $request->user_id;
+        $documents = UserDocuments::where('user_id',$id)->pluck('user_docs_img_path');
+//        dd($documents);
+        return response()->json(['imgs' => $documents]);
     }
 }

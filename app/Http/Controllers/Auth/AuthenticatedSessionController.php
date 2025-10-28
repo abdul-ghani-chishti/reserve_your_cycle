@@ -30,7 +30,8 @@ class AuthenticatedSessionController extends Controller
 
         $user_info = auth()->user();
 
-        $user_info_details = ['user_name' => $user_info->name,'user_id' => $user_info->id,'user_type' => $user_info->is_cycle,'user_email' => $user_info->email];
+        $user_info_details = ['user_name' => $user_info->name, 'user_id' => $user_info->id,
+            'user_type' => $user_info->is_cycle, 'user_email' => $user_info->email, 'user_status_id' => $user_info->user_status_id];
 
         session($user_info_details);
 
