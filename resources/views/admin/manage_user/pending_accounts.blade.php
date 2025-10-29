@@ -49,7 +49,7 @@
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content bg-dark border-0">
                     <div class="modal-body text-center p-0">
-                        <img src="" alt="Zoomed Document" class="img-fluid rounded shadow-lg" style="max-height: 140vh; width: auto;">
+                        <img src="" alt="Zoomed Document" class="img-fluid rounded shadow-lg" style="max-height: 140vh; width: auto; padding: 10px">
                     </div>
                 </div>
             </div>
@@ -168,15 +168,17 @@
             });
 
             $('#datatable tbody').on('click', 'tr td.action .btn-group .dropdown-menu .dropdown-item', function() {
-                if ($(this).hasClass('reject')) {
-                    var cycle_availability_id = $(this).data('target-id')
+                if ($(this).hasClass('action')) {
+                    var id = parseInt($(this).parents('tr').attr('id'));
+                    var status_id = $(this).attr('data-target-id');
 
                     $.ajax({
-                        url: '{!! route('booking.cancel_booking') !!}',
+                        url: '{!! route('admin.manage_user.reject_user_request') !!}',
                         method: 'POST',
                         data: {
                             '_token': '{{ csrf_token() }}',
-                            'cycle_availability_id': cycle_availability_id
+                            'user_id': id,
+                            'status_id': status_id
                         }
                     }).done(function(data){
                         if(data.status == 1){
@@ -187,8 +189,8 @@
                             scan_sound(0)
                             toastr.error(data.error, 'Error!', {positionClass: 'toast-top-center', containerId: 'toast-top-center'});
                         }
-                        table.draw()
                     });
+                    table.draw()
                 }
             });
 
@@ -218,7 +220,7 @@
                             <img src="${fullPath}"
                                  alt="User Document ${index + 1}"
                                  class="img-thumbnail doc-thumb shadow-sm"
-                                 style="width: 120px; height: 120px; object-fit: cover; cursor: pointer;"
+                                 style="width: 120px; height: 120px; margin-right: 30px ; object-fit: cover; cursor: pointer;"
                                  data-full="${fullPath}">
                             <p class="mt-2 small text-muted">Document ${index + 1}</p>
                         </div>

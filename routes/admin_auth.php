@@ -30,6 +30,7 @@ Route::prefix('admin')->middleware('auth:admin')->name('admin.')->group(function
         Route::get('pending_account', [ManageUserController::class, 'pending_account'])->name('manage_user.pending_account');
         Route::get('pending_account_list', [ManageUserController::class, 'pending_account_list'])->name('manage_user.pending_account_list');
         Route::post('pending_account_show_docs', [ManageUserController::class, 'pending_account_show_docs'])->name('manage_user.pending_account_show_docs');
+        Route::post('reject_user_request', [ManageUserController::class, 'reject_user_request'])->name('manage_user.reject_user_request');
     });
 
 });
