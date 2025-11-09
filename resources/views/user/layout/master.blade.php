@@ -36,11 +36,13 @@
     Your browser does not support the audio element.
 </audio>
 
-{{--push notification--}}
+
 <script type="module">
     // Firebase config
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
     import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-messaging.js";
+
+    import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyBL8YQagNC6Olp-OJqVrswOqnK1Ku83mFU",
@@ -54,6 +56,7 @@
 
     const app = initializeApp(firebaseConfig);
     const messaging = getMessaging(app);
+    const db = getFirestore(app);
 
     // Request permission & get token
     Notification.requestPermission().then(permission => {
@@ -78,7 +81,67 @@
         console.log("Message received:", payload);
         alert(payload.notification.title + "\n" + payload.notification.body);
     });
+    // firebase config ends
+
+
+    //firestore for live chat
+    const USER_ID = "{{ auth()->id() }}"; // for user side
+    const ADMIN_ID = "admin_1"; // you can adjust this for your admin user
+    console.log(USER_ID);
+    // Send a message
+    async function sendMessage() {
+        const messageText = document.getElementById("messageInput").value.trim();
+        if (!messageText) return;
+
+        const chatRef = collection(db, "chats", `user_${USER_ID}`, "messages");
+        await addDoc(chatRef, {
+            sender_id: USER_ID,
+            receiver_id: ADMIN_ID,
+            text: messageText,
+            timestamp: serverTimestamp(),
+        });
+
+        document.getElementById("messageInput").value = "";
+    }
+
+    document.getElementById("sendBtn").addEventListener("click", sendMessage);
+
+    // Listen for new messages in real-time
+    function listenForMessages() {
+        const chatRef = collection(db, "chats", `user_${USER_ID}`, "messages");
+        const q = query(chatRef, orderBy("timestamp"));
+        onSnapshot(q, snapshot => {
+            const messagesDiv = document.getElementById("messages");
+            messagesDiv.innerHTML = "";
+            snapshot.forEach(doc => {
+                const msg = doc.data();
+                const messageElem = document.createElement("div");
+                messageElem.textContent = (msg.sender_id == USER_ID ? "You: " : "Admin: ") + msg.text;
+                messagesDiv.appendChild(messageElem);
+            });
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        });
+    }
+
+    listenForMessages();
+//firestore for live chat ends
+
+// live chat btn
+    document.addEventListener("DOMContentLoaded", function() {
+        const chatButton = document.getElementById("chatButton");
+        const chatPopup = document.getElementById("chatPopup");
+        const closeChat = document.getElementById("closeChat");
+
+        chatButton.addEventListener("click", () => {
+            chatPopup.classList.toggle("hidden");
+        });
+
+        closeChat.addEventListener("click", () => {
+            chatPopup.classList.add("hidden");
+        });
+    });
+// live chat btn end
 </script>
-{{--push notification end--}}
+
 </body>
 </html>

@@ -310,6 +310,100 @@
         border-radius: 10px; /* Optional: Rounds the corners */
         margin: 25px;
     }
+
+/*    live chat */
+    /* Floating Chat Bubble */
+    .chat-button {
+        position: fixed;
+        bottom: 25px;
+        right: 25px;
+        background-color: #007bff;
+        color: white;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 26px;
+        cursor: pointer;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s;
+        z-index: 9999;
+    }
+    .chat-button:hover {
+        transform: scale(1.1);
+    }
+
+    /* Chat Popup */
+    .chat-popup {
+        position: fixed;
+        bottom: 90px;
+        right: 25px;
+        width: 320px;
+        height: 400px;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        z-index: 10000;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    /* Header */
+    .chat-header {
+        background-color: #007bff;
+        color: white;
+        padding: 12px;
+        font-weight: bold;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .close-btn {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    /* Messages */
+    .chat-messages {
+        flex: 1;
+        padding: 10px;
+        overflow-y: auto;
+        background: #f8f9fa;
+        font-size: 14px;
+    }
+
+    /* Input */
+    .chat-input {
+        display: flex;
+        border-top: 1px solid #ddd;
+    }
+    .chat-input input {
+        flex: 1;
+        border: none;
+        padding: 10px;
+        outline: none;
+    }
+    .chat-input button {
+        background: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        cursor: pointer;
+    }
+
+    /*    live chat ends */
 </style>
 
 @section('content')
@@ -399,6 +493,25 @@
                             @if(in_array(session('user_status_id'),[2,3,4]))
                                     <h1 class="">Your account is under review !!!</h1>
                             @endif
+                            {{--live chat--}}
+                                <!-- Floating Chat Bubble -->
+                                <div id="chatButton" class="chat-button">
+                                    💬
+                                </div>
+
+                                <!-- Chat Popup -->
+                                <div id="chatPopup" class="chat-popup hidden">
+                                    <div class="chat-header">
+                                        <span>Live Chat with Admin</span>
+                                        <button id="closeChat" class="close-btn">&times;</button>
+                                    </div>
+                                    <div id="messages" class="chat-messages"></div>
+                                    <div class="chat-input">
+                                        <input type="text" id="messageInput" placeholder="Type a message...">
+                                        <button id="sendBtn">Send</button>
+                                    </div>
+                                </div>
+                                {{--live chat end--}}
                         </div>
                     </div>
                 </div>

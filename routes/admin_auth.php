@@ -1,10 +1,9 @@
 <?php
-
-
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\Auth\RegisteredUserController;
 use App\Http\Controllers\Admin\ManageUserController;
+use App\Http\Controllers\FirebaseNotificationController;
 use Illuminate\Support\Facades\Route;
 
 // link: admin/login
@@ -33,4 +32,5 @@ Route::prefix('admin')->middleware('auth:admin')->name('admin.')->group(function
         Route::post('reject_user_request', [ManageUserController::class, 'reject_user_request'])->name('manage_user.reject_user_request');
     });
 
+    Route::get('/chat', [FirebaseNotificationController::class, 'live_chat']); // it handles the live chat from firestore
 });

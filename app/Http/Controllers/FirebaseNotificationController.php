@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Kreait\Firebase\Messaging\CloudMessage;
@@ -33,7 +34,7 @@ class FirebaseNotificationController extends Controller
         return response()->json(['success' => true]);
     }
 
-    // Send test notification
+    // Send test push notification
     public function sendTest(Request $request)
     {
         // Initialize Firebase Messaging
@@ -60,5 +61,11 @@ class FirebaseNotificationController extends Controller
         } catch (\Kreait\Firebase\Exception\Messaging\NotFound $e) {
             return response()->json(['error' => 'Token/project not found: ' . $e->getMessage()]);
         }
+    }
+
+    public function live_chat()
+    {
+        $users = User::select('id', 'name')->get();
+        return view('admin.chat', compact('users'));
     }
 }
