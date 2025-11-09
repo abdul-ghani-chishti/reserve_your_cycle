@@ -35,5 +35,50 @@
     <source src="{{asset('file/error.mp3')}}" type="audio/mpeg">
     Your browser does not support the audio element.
 </audio>
+
+{{--push notification--}}
+<script type="module">
+    // Firebase config
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
+    import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-messaging.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBL8YQagNC6Olp-OJqVrswOqnK1Ku83mFU",
+        authDomain: "reserve-cycle.firebaseapp.com",
+        projectId: "reserve-cycle",
+        storageBucket: "reserve-cycle.firebasestorage.app",
+        messagingSenderId: "48529419941",
+        appId: "1:48529419941:web:dedffae850f4a8087de74c",
+        measurementId: "G-QKMM3G87QR"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const messaging = getMessaging(app);
+
+    // Request permission & get token
+    Notification.requestPermission().then(permission => {
+        if (permission === "granted") {
+            getToken(messaging, { vapidKey: "BOEFNNpBWVKNpjPHcC-kbXP_DuD2hBuyQvD-LbDgLn3NQ6PvDVRrzzG5_QTl-lZh4qSwLxzK7rp2utzEhGH-WHc" }).then(token => {
+                console.log("FCM Token:", token);
+
+                // Save token to backend
+                fetch('/save-fcm-token', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({ token })
+                });
+            }).catch(err => console.error("Error getting token:", err));
+        }
+    });
+    // Listen for foreground messages
+    onMessage(messaging, payload => {
+        console.log("Message received:", payload);
+        alert(payload.notification.title + "\n" + payload.notification.body);
+    });
+</script>
+{{--push notification end--}}
 </body>
 </html>

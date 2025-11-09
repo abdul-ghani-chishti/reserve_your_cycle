@@ -3,11 +3,16 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\FirebaseNotificationController;
 use App\Models\CycleInfo;
 use App\Models\User;
 use App\Models\UserDocuments;
 use Illuminate\Http\Request;
+use Kreait\Firebase\Contract\Messaging;
 use Yajra\DataTables\DataTables;
+use Kreait\Firebase\Factory;
+use Kreait\Firebase\Messaging\CloudMessage;
+use Kreait\Firebase\Messaging\Notification;
 
 class ManageUserController extends Controller
 {
@@ -80,6 +85,18 @@ class ManageUserController extends Controller
         else
             return response()->json(['status' => 0, 'error' => 'Something Went Wrong !!!']);
 
+        $user = User::find($user_id);
+
+        if ($user->fcm_token)
+        {
+            $request = Request::create('/send-test-push', 'POST', [
+                'token' => $user->fcm_token,
+                'title' => 'Cycle Reservation',
+                'body' => 'Your account is rejected !, Contact to support !'
+            ]);
+
+            app(FirebaseNotificationController::class)->sendTest($request);
+        }
             return response()->json(['status' => 1, 'success' => 'Status Updated Successfully !!!']);
     }
 }

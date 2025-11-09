@@ -12,6 +12,7 @@ use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\FirebaseNotificationController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
@@ -42,6 +43,8 @@ Route::middleware('guest')->group(function () {
 // users -> 1 having by cycle/ 0 not having by-cycle, auth is for user (1/0)
 Route::middleware('auth')->group(function () {
 
+    Route::post('/save-fcm-token', [FirebaseNotificationController::class, 'saveToken']); // to save fcm_token when login, it hits by script in user/layouts/masters.blade
+
     Route::prefix('dashboard')->name('dashboard.')->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('index');
         Route::get('about', [DashboardController::class, 'about'])->name('about');
@@ -56,13 +59,11 @@ Route::middleware('auth')->group(function () {
         Route::post('reserve_available_hours_form', [CycleInfoController::class, 'reserve_available_hours_form'])->name('reserve_available_hours_form');
     });
 
-
     Route::prefix('booking')->name('booking.')->group(function () {
         Route::get('user_reservation', [CycleBookingController::class, 'user_reservation'])->name('user_reservation'); // user reservation history
         Route::get('user_reservation_list', [CycleBookingController::class, 'user_reservation_list'])->name('user_reservation_list'); // user reservation history
         Route::post('cancel_booking', [CycleBookingController::class, 'cancel_booking'])->name('cancel_booking'); // user reservation history
     });
-
 
     Route::get('verify-email', EmailVerificationPromptController::class)
                 ->name('verification.notice');
