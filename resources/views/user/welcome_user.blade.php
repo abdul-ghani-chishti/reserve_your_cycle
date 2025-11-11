@@ -189,7 +189,7 @@
         background: inherit;
     }
 
-/*    card box*/
+    /*    card box*/
     html {
         font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
         font-size: 14px;
@@ -305,13 +305,13 @@
         color: rgba(0, 0, 0, .87);
     }
 
-    .card_border{
+    .card_border {
         border: 3px solid #007bff; /* Change color here */
         border-radius: 10px; /* Optional: Rounds the corners */
         margin: 25px;
     }
 
-/*    live chat */
+    /*    live chat */
     /* Floating Chat Bubble */
     .chat-button {
         position: fixed;
@@ -331,6 +331,7 @@
         transition: transform 0.3s;
         z-index: 9999;
     }
+
     .chat-button:hover {
         transform: scale(1.1);
     }
@@ -389,12 +390,14 @@
         display: flex;
         border-top: 1px solid #ddd;
     }
+
     .chat-input input {
         flex: 1;
         border: none;
         padding: 10px;
         outline: none;
     }
+
     .chat-input button {
         background: #007bff;
         color: white;
@@ -434,7 +437,8 @@
                                                                 <span class="ql_bottom"></span>
                                                             </a>
                                                             @if($cycle_available && $user_info)
-                                                                <a class="quicklink link3" href="{{route('cycle_info.deactivate_cycle')}}">
+                                                                <a class="quicklink link3"
+                                                                   href="{{route('cycle_info.deactivate_cycle')}}">
                                                                 <span class="ql_caption">
                                                                     <span class="outer">
                                                                         <span class="inner">
@@ -447,7 +451,8 @@
                                                                 </a>
 
                                                             @elseif(!$cycle_available && $user_info)
-                                                                <a class="quicklink link3" href="{{route('cycle_info.activate_cycle')}}">
+                                                                <a class="quicklink link3"
+                                                                   href="{{route('cycle_info.activate_cycle')}}">
                                                                 <span class="ql_caption">
                                                                     <span class="outer">
                                                                         <span class="inner">
@@ -472,46 +477,49 @@
                             @endif
                             @if(session('user_type') == 0)
                                 <h1 class="">You're logged in as not having a cycle!</h1>
-                                    <div class="container">
-                                        <div class="row">
-                                            @foreach($cycle_infos as $cycle_info)
-                                                <a href="{{ route('cycle_info.show_cycle_details', ['date' => $cycle_info['available_date']]) }}" class="text-decoration-none text-dark">
-                                                    <div class="col-sm-6 col-md-4 col-lg-3 mt-4 card_border justify-content-start">
-                                                        <div class="card mt-2">
-                                                            <div class="card-block">
-                                                                <div class="meta">
-                                                                    <a href="{{ route('cycle_info.show_cycle_details', ['date' => $cycle_info['available_date']]) }}">Available Date : {{$cycle_info['available_date']}}</a>
-                                                                </div>
+                                <div class="container">
+                                    <div class="row">
+                                        @foreach($cycle_infos as $cycle_info)
+                                            <a href="{{ route('cycle_info.show_cycle_details', ['date' => $cycle_info['available_date']]) }}"
+                                               class="text-decoration-none text-dark">
+                                                <div
+                                                    class="col-sm-6 col-md-4 col-lg-3 mt-4 card_border justify-content-start">
+                                                    <div class="card mt-2">
+                                                        <div class="card-block">
+                                                            <div class="meta">
+                                                                <a href="{{ route('cycle_info.show_cycle_details', ['date' => $cycle_info['available_date']]) }}">Available
+                                                                    Date : {{$cycle_info['available_date']}}</a>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </a>
-                                            @endforeach
-                                        </div>
+                                                </div>
+                                            </a>
+                                        @endforeach
                                     </div>
+                                </div>
                             @endif
                             @if(in_array(session('user_status_id'),[2,3,4]))
-                                    <h1 class="">Your account is under review !!!</h1>
+                                <h1 class="">Your account is under review !!!</h1>
                             @endif
                             {{--live chat--}}
-                                <!-- Floating Chat Bubble -->
-                                <div id="chatButton" class="chat-button">
-                                    💬
-                                </div>
+                            <!-- Floating Chat Bubble -->
+                            <div id="chatButton" class="chat-button">
+                                💬
+                            </div>
 
-                                <!-- Chat Popup -->
-                                <div id="chatPopup" class="chat-popup hidden">
-                                    <div class="chat-header">
-                                        <span>Live Chat with Admin</span>
-                                        <button id="closeChat" class="close-btn">&times;</button>
-                                    </div>
-                                    <div id="messages" class="chat-messages"></div>
-                                    <div class="chat-input">
-                                        <input type="text" id="messageInput" placeholder="Type a message...">
-                                        <button id="sendBtn">Send</button>
-                                    </div>
+                            <!-- Chat Popup -->
+                            <div id="chatPopup" class="chat-popup hidden">
+                                <div class="chat-header">
+                                    <span>Live Chat with Admin</span>
+                                    <button id="closeChat" class="close-btn">&times;</button>
                                 </div>
-                                {{--live chat end--}}
+                                <div id="messages" class="chat-messages"></div>
+                                <div class="chat-input">
+                                    <input type="text" id="messageInput" placeholder="Type a message...">
+                                    <button id="sendBtn">Send</button>
+                                </div>
+                            </div>
+                            {{--live chat end--}}
                         </div>
                     </div>
                 </div>
@@ -524,7 +532,8 @@
             <div class="modal-content">
                 <div class="modal-header">
                     @if($cycle_available)
-                    <h4 class="modal-title" id="delivered_shipments_modal_title">Add Hours | Already Have an Active Cycle</h4>
+                        <h4 class="modal-title" id="delivered_shipments_modal_title">Add Hours | Already Have an Active
+                            Cycle</h4>
                     @else
                         <h4 class="modal-title" id="delivered_shipments_modal_title">Add Cycle Details</h4>
                     @endif
@@ -533,12 +542,14 @@
                     </button>
                 </div>
                 <div class="modal-body text-center">
-                    <form id="add_cycle_modal_form" action="{{route('cycle_info.add_cycle_modal_form')}}" method="post" enctype="multipart/form-data" class="form-horizontal mb-1 justify-content-center"
+                    <form id="add_cycle_modal_form" action="{{route('cycle_info.add_cycle_modal_form')}}" method="post"
+                          enctype="multipart/form-data" class="form-horizontal mb-1 justify-content-center"
                           novalidate="novalidate">
-                            {{ csrf_field() }}
-                         <div class="row justify-content-center">
+                        {{ csrf_field() }}
+                        <div class="row justify-content-center">
                             <div class="form-group col-5">
-                                <input type="text" name="cycle_brand_name" id="cycle_brand_name" class="form-control cycle_brand_name"
+                                <input type="text" name="cycle_brand_name" id="cycle_brand_name"
+                                       class="form-control cycle_brand_name"
                                        placeholder="Cycle Brand Name">
                             </div>
                             <div class="form-group col-5">
@@ -554,23 +565,28 @@
                                        placeholder="Enter SKU">
                             </div>
                             <div class="form-group col-md-10">
-                                <textarea type="text" name="cycle_description" id="cycle_description" class="form-control cycle_description"
+                                <textarea type="text" name="cycle_description" id="cycle_description"
+                                          class="form-control cycle_description"
                                           placeholder="Cycle Description"></textarea>
                             </div>
                             <div class="form-group col-5">
-                                <input type="text" name="cycle_available_from" id="cycle_available_from" class="form-control cycle_available_from"
+                                <input type="text" name="cycle_available_from" id="cycle_available_from"
+                                       class="form-control cycle_available_from"
                                        placeholder="Cycle Available From">
                             </div>
                             <div class="form-group col-5">
-                                <input type="text" name="cycle_available_to" id="cycle_available_to" class="form-control cycle_available_to"
+                                <input type="text" name="cycle_available_to" id="cycle_available_to"
+                                       class="form-control cycle_available_to"
                                        placeholder="Cycle Available To">
                             </div>
                             <div class="form-group col-5">
-                                <input type="file" name="cycle_images[]" id="cycle_images" class="form-control cycle_images"
+                                <input type="file" name="cycle_images[]" id="cycle_images"
+                                       class="form-control cycle_images"
                                        placeholder="Select Images" multiple>
                             </div>
                             <div class="form-group col-5">
-                                <input type="text" name="cycle_available_date" id="cycle_available_date" class="form-control cycle_available_date"
+                                <input type="text" name="cycle_available_date" id="cycle_available_date"
+                                       class="form-control cycle_available_date"
                                        placeholder="Cycle Available Date">
                             </div>
                         </div>
@@ -592,7 +608,8 @@
     <link rel="stylesheet" type="text/css" href="{{asset('app-assets/vendors/css/cryptocoins/cryptocoins.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('app-assets/vendors/css/extensions/toastr.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('app-assets/vendors/css/pickers/pickadate/pickadate.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{asset('app-assets/css/plugins/pickers/daterange/daterange.min.css')}}">
+    <link rel="stylesheet" type="text/css"
+          href="{{asset('app-assets/css/plugins/pickers/daterange/daterange.min.css')}}">
 
 @endsection
 
@@ -601,7 +618,8 @@
     <script src="{{asset('app-assets/vendors/js/pickers/pickadate/picker.js')}}" type="text/javascript"></script>
     <script src="{{asset('app-assets/vendors/js/pickers/pickadate/picker.date.js')}}" type="text/javascript"></script>
     <script src="{{asset('app-assets/vendors/js/pickers/pickadate/legacy.js')}}" type="text/javascript"></script>
-    <script src="{{asset('app-assets/vendors/js/forms/validation/jquery.validate.min.js')}}" type="text/javascript"></script>
+    <script src="{{asset('app-assets/vendors/js/forms/validation/jquery.validate.min.js')}}"
+            type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pickadate.js/3.6.4/picker.time.js"></script>
 
     <script type="text/javascript">
@@ -644,7 +662,7 @@
                 clear: '', // Removes the "Clear" button
             }).pickatime('picker');
 
-            $('#cycle_available_to').click(function() {
+            $('#cycle_available_to').click(function () {
                 var selectedTime = available_from_time.get('select'); // Get selected time from available_from_time
 
                 if (selectedTime) {
@@ -653,17 +671,17 @@
                 }
             });
 
-            $('body').on('click','.rent_your_cycle',function () {
+            $('body').on('click', '.rent_your_cycle', function () {
                 $('#add_cycle_modal_form').modal('show');
             });
 
             $('#add_cycle_modal_form form').validate({
                 errorClass: 'danger',
                 successClass: 'success',
-                errorPlacement: function(error, element) {
+                errorPlacement: function (error, element) {
                     error.addClass('w-100').appendTo(element.parent('.form-group'));
                 },
-                submitHandler: function(form) {
+                submitHandler: function (form) {
                     swal({
                         text: 'Are you sure, about the dates and hours ?',
                         icon: 'info',
@@ -684,10 +702,10 @@
                         closeOnClickOutside: false,
                         closeOnEsc: false,
                         dangerMode: true
-                    }).then(function(confirm) {
+                    }).then(function (confirm) {
                         console.log('Form Hit');
-                        if(confirm){
-                            console.log('form',form)
+                        if (confirm) {
+                            console.log('form', form)
                             $(form).find('button[type=submit]').attr('disabled', 'disabled');
                             form.submit();
                         }
@@ -698,8 +716,7 @@
 
             let cycle_available = '{{$cycle_available}}'
             console.log(cycle_available);
-            if (cycle_available == 1)
-            {
+            if (cycle_available == 1) {
                 console.log('exist')
                 document.getElementById('cycle_brand_name').readOnly = true;
                 document.getElementById('cycle_type').readOnly = true;
@@ -711,14 +728,11 @@
                 document.getElementById('cycle_available_to').readOnly = false;
                 document.getElementById('cycle_available_date').readOnly = false;
 
-                function input_click(e)
-                {
+                function input_click(e) {
                     e.stopPropagation();
                     return false;
                 }
-            }
-            else
-            {
+            } else {
                 console.log('not_exist')
                 document.getElementById('cycle_available_from').readOnly = false;
                 document.getElementById('cycle_available_to').readOnly = false;
