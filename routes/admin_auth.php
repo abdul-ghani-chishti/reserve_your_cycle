@@ -32,5 +32,5 @@ Route::prefix('admin')->middleware('auth:admin')->name('admin.')->group(function
         Route::post('reject_user_request', [ManageUserController::class, 'reject_user_request'])->name('manage_user.reject_user_request');
     });
 
-    Route::get('/chat', [FirebaseNotificationController::class, 'live_chat']); // it handles the live chat from firestore
+    Route::get('live_chat', [FirebaseNotificationController::class, 'live_chat'])->name('live_chat'); // it handles the live chat from firestore
 });

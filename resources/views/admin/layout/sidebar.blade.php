@@ -38,6 +38,12 @@
 
         <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
             <li>
+                <a href="{{route('admin.live_chat')}}" class="menu-item">
+                    <i class="la la-sticky-note"></i>Live Chat</a></li>
+        </ul>
+
+        <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
+            <li>
                 <a href="" class="menu-item">
                     <i class="la la-sticky-note"></i>Report</a></li>
         </ul>
