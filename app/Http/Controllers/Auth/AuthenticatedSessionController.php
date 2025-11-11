@@ -43,6 +43,12 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        $user = Auth::user();
+
+        if($user)
+        {
+            $user->update(['fcm_token' => null]);
+        }
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
