@@ -11,7 +11,7 @@
         <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
             @if(session('user_type') == 1)
                 <li>
-                    <a href="" class="menu-item">
+                    <a href="{{route('booking.cycle_reservation')}}" class="menu-item"> {{--cycle owner list--}}
                         <i class="la la-user-plus"></i>Reservations</a>
                 </li>
             @else

@@ -7,6 +7,7 @@ use App\Models\CycleAvailability;
 use App\Models\CycleInfo;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Yajra\Datatables\Datatables;
 
 class CycleBookingController extends Controller
@@ -17,9 +18,9 @@ class CycleBookingController extends Controller
             ->where('ca.user_id',auth()->id())
             ->get();
         return view('user.cycle.booking_cycle_reservations');
-    }
+    }// according to user who dont have cycle
 
-    public function user_reservation_list()
+    public function user_reservation_list()// according to user who dont have cycle
     {
         $list = CycleInfo::join('cycle_availabilities as ca','ca.cycle_id','cycle_infos.id')
             ->where('ca.user_id',auth()->id())
@@ -50,9 +51,6 @@ class CycleBookingController extends Controller
                     return $dropdown;
             })
             ->make(true);
-
-        dd('list',$list);
-        // now have to show reservation of cycle according to each user , by using datatable
     }
 
     public function cancel_booking(Request $request)
@@ -83,5 +81,53 @@ class CycleBookingController extends Controller
                 return ['status' => 0, 'error' => 'You cannot cancel this booking because it is now late !!!'];
             }
         }
+    }
+
+    public function cycle_reservation()// according to user who have cycle or cycle owner
+    {
+        $list = CycleInfo::join('cycle_availabilities as ca','ca.cycle_id','cycle_infos.id')
+            ->where('ca.user_id',auth()->id())
+            ->get();
+        return view('user.cycle_owner.booking_cycle_reservations');
+    }
+
+    public function cycle_reservation_list()// according to user who have cycle or cycle owner
+    {
+        $list = CycleAvailability::where('cycle_availabilities.owner_id', auth()->id())
+            ->select(
+                'cycle_availabilities.available_date',
+                DB::raw('COUNT(*) as total_rows')
+            )
+            ->groupBy('cycle_availabilities.available_date')
+            ->orderBy('cycle_availabilities.available_date')
+            ->get();
+
+        $datatable = Datatables::of($list)
+            ->addColumn('total_hours_count', function ($data) {
+                return '<button class="btn btn-sm btn-outline-info align-middle" data-target-id='.$data->available_date.'>' . $data->total_rows . '</button>';
+            })
+            ->addColumn("action", function ($result) {
+                $dropdown = '
+                      <div class="btn-group">
+                        <button type="button" class="btn btn-sm btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Actions</button>
+                        <div class="dropdown-menu dropdown-menu-sm">
+                    ';
+                $dropdown .= '<button type="button" class="dropdown-item cancel_booking" data-target-id=' . $result->cycle_availability_id . ' rel="assignlocation" ><div class="row no-gutters align-items-center"><div class="col-2"><i class="ft-plus-circle"></i></div><div class="col-9 offset-1">Cancle Booking</div></button>';
+
+                $dropdown .= '<button type="button" class="dropdown-item feature" data-target-id=' . $result->cycle_availability_id . ' rel="assignlocation" ><div class="row no-gutters align-items-center"><div class="col-2"><i class="ft-plus-circle"></i></div><div class="col-9 offset-1">Feature Button</div></button>';
+
+                $dropdown .= '
+                        </div>
+                      </div>
+                    ';
+                return $dropdown;
+            })
+            ->rawColumns(['total_hours_count', 'action']);
+            return $datatable->make(true);
+    }
+
+    public function cycle_show_hours(Request $request)
+    {
+        dd($request->all());
     }
 }

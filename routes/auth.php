@@ -63,6 +63,11 @@ Route::middleware('auth')->group(function () {
         Route::get('user_reservation', [CycleBookingController::class, 'user_reservation'])->name('user_reservation'); // user reservation history
         Route::get('user_reservation_list', [CycleBookingController::class, 'user_reservation_list'])->name('user_reservation_list'); // user reservation history
         Route::post('cancel_booking', [CycleBookingController::class, 'cancel_booking'])->name('cancel_booking'); // user reservation history
+
+        Route::get('cycle_reservation', [CycleBookingController::class, 'cycle_reservation'])->name('cycle_reservation'); // cycle owner reservation history
+        Route::get('cycle_reservation_list', [CycleBookingController::class, 'cycle_reservation_list'])->name('cycle_reservation_list'); // cycle owner reservation history
+        Route::post('cycle_show_hours', [CycleBookingController::class, 'cycle_show_hours'])->name('cycle_show_hours'); // cycle owner reservation history
+
     });
 
     Route::get('verify-email', EmailVerificationPromptController::class)
