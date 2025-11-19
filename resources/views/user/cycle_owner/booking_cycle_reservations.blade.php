@@ -24,6 +24,22 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="show_hours_modal" tabindex="-1" role="dialog" aria-labelledby="show_hours_modal"
+             aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="show_hours">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="ShowHoursModal">User Documents</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span>&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 @endsection
 @section('css')
@@ -56,13 +72,15 @@
                         className: 'btn btn-primary',
                         enabled: true,
                         action: function (e, dt, node, config) {
-                            $('#add_route').modal('show');}},
+                            $('#add_route').modal('show');
+                        }
+                    },
                 ],
                 scrollX: false,
                 // scrollY: '500px',
                 "autoWidth": false,
                 // lengthMenu: [[50, 100, 500, 1000, -1], [50, 100, 500, 1000, 'All']],
-                lengthMenu: [[10, 50 ,100, 500, 1000, -1], [10, 50, 100, 500, 1000, 'All']],
+                lengthMenu: [[10, 50, 100, 500, 1000, -1], [10, 50, 100, 500, 1000, 'All']],
                 pageLength: 10,
                 pagingType: 'full_numbers',
                 processing: true,
@@ -85,9 +103,19 @@
                             return '';
                         }
                     },
-                    {data: 'available_date', name: 'cycle_availabilities.available_date', class: 'align-middle available_date'},
+                    {
+                        data: 'available_date',
+                        name: 'cycle_availabilities.available_date',
+                        class: 'align-middle available_date'
+                    },
                     {data: 'total_hours_count', name: '', class: 'align-middle total_hours_count'},
-                    {data: 'action', name: 'action', class: 'align-middle action text-center', orderable: false, searchable: false}
+                    {
+                        data: 'action',
+                        name: 'action',
+                        class: 'align-middle action text-center',
+                        orderable: false,
+                        searchable: false
+                    }
                 ],
                 rowCallback: function (row, data, index) {
                     var info = table.page.info();
@@ -123,25 +151,30 @@
                 }
             });
 
-            $('#datatable tbody').on('click', 'tr td.action .btn-group .dropdown-menu .dropdown-item', function() {
-                if ($(this).hasClass('cancel_booking')) {
-                    var cycle_availability_id = $(this).data('target-id')
+            $('#datatable tbody').on('click', 'tr td.action .btn-group .dropdown-menu .dropdown-item', function () {
+                if ($(this).hasClass('remove_cycle')) {
+                    var date = $(this).attr('data-target-id');
 
                     $.ajax({
-                        url: '{!! route('booking.cancel_booking') !!}',
+                        url: '{!! route('booking.remove_cycle_hours') !!}',
                         method: 'POST',
                         data: {
                             '_token': '{{ csrf_token() }}',
-                            'cycle_availability_id': cycle_availability_id
+                            'date': date
                         }
-                    }).done(function(data){
-                        if(data.status == 1){
+                    }).done(function (data) {
+                        if (data.status == 1) {
                             scan_sound(1)
-                            toastr.success(data.success, 'Success!', {positionClass: 'toast-bottom-center', containerId: 'toast-bottom-center'});
-                        }
-                        else{
+                            toastr.success(data.success, 'Success!', {
+                                positionClass: 'toast-bottom-center',
+                                containerId: 'toast-bottom-center'
+                            });
+                        } else {
                             scan_sound(0)
-                            toastr.error(data.error, 'Error!', {positionClass: 'toast-top-center', containerId: 'toast-top-center'});
+                            toastr.error(data.error, 'Error!', {
+                                positionClass: 'toast-top-center',
+                                containerId: 'toast-top-center'
+                            });
                         }
                         table.draw()
                     });
@@ -150,11 +183,20 @@
 
             $('body').on('click', '#datatable tbody tr td.total_hours_count button', function () {
                 var date = $(this).attr('data-target-id');
-                console.log('Fetching date:', date);
-
-                // Show loading message
-                $('#documents_modal .modal-body').html('<p class="text-center text-muted">Loading documents...</p>');
-                $('#documents_modal').modal('show');
+                let html = `
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Brand</th>
+                                <th>Model</th>
+                                <th>Type</th>
+                                <th>Date</th>
+                                <th>Hour</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                    `;
 
                 $.ajax({
                     url: '{!! route('booking.cycle_show_hours') !!}',
@@ -164,11 +206,30 @@
                         'date': date
                     },
                     success: function (data) {
-
+                        if (data.status === 1) {
+                            data.data.forEach(function (item) {
+                                html += `
+                                <tr>
+                                    <td>${item.brand}</td>
+                                    <td>${item.model}</td>
+                                    <td>${item.type}</td>
+                                    <td>${item.available_date}</td>
+                                    <td>${item.available_hours}</td>
+                                    <td>
+                                        <span class="badge ${item.cycle_availability_status_id === 1 ? 'badge-success' : 'badge-danger'}">
+                                            ${item.cycle_availability_status_id === 1 ? 'Available' : 'Booked'}
+                                        </span>
+                                    </td>
+                                </tr>
+                            `;
+                            });
+                            html += `</tbody></table>`;
+                            $("#show_hours_modal .modal-body").html(html);
+                            $("#show_hours_modal").modal("show");
+                        }
                     },
-                    error: function (xhr, status, error) {
-                        console.error('Error loading Hours:', error);
-                        $('#documents_modal .modal-body').html('<p class="text-danger text-center">Failed to load Hours.</p>');
+                    error: function (data) {
+                        $('#show_hours_modal .modal-body').html('<p class="text-danger text-center">Failed to load Hours.</p>');
                     }
                 });
             });

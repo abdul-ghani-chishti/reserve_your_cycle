@@ -12,10 +12,11 @@ use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\EmailNotificationController;
 use App\Http\Controllers\FirebaseNotificationController;
 use Illuminate\Support\Facades\Route;
 // it's users routes
-Route::middleware('guest')->group(function () {
+Route::middleware('guest')->group(function () { // before login routes
 
     Route::get('register', [RegisteredUserController::class, 'create'])
                 ->name('register');
@@ -40,7 +41,7 @@ Route::middleware('guest')->group(function () {
                 ->name('password.store');
 });
 
-// users -> 1 having by cycle/ 0 not having by-cycle, auth is for user (1/0)
+// users -> 1 = having by cycle/ 0 = not having by-cycle, auth is for both user (1/0)
 Route::middleware('auth')->group(function () {
 
     Route::post('/save-fcm-token', [FirebaseNotificationController::class, 'saveToken']); // to save fcm_token when login, it hits by script in user/layouts/masters.blade
@@ -67,7 +68,11 @@ Route::middleware('auth')->group(function () {
         Route::get('cycle_reservation', [CycleBookingController::class, 'cycle_reservation'])->name('cycle_reservation'); // cycle owner reservation history
         Route::get('cycle_reservation_list', [CycleBookingController::class, 'cycle_reservation_list'])->name('cycle_reservation_list'); // cycle owner reservation history
         Route::post('cycle_show_hours', [CycleBookingController::class, 'cycle_show_hours'])->name('cycle_show_hours'); // cycle owner reservation history
+        Route::post('remove_cycle_hours', [CycleBookingController::class, 'remove_cycle_hours'])->name('remove_cycle_hours'); // cycle owner reservation history -> action -> remove cycle hours
+    });
 
+    Route::prefix('email_notification')->name('email_notification.')->group(function () {
+        Route::get('email', [EmailNotificationController::class, 'email'])->name('email'); // user can send email to admin
     });
 
     Route::get('verify-email', EmailVerificationPromptController::class)

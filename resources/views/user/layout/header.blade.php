@@ -6,7 +6,7 @@
 <meta name="keywords" content="Trax">
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <meta name="author" content="Trax IT">
-<title>@yield('title') - Alfarraid
+<title>@yield('title') - Cycle Reservation
 </title>
 <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('img/favicon_new-32x32.png') }} ">
 <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('img/favicon_new-16x16.png') }}">

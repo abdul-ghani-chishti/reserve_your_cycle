@@ -112,7 +112,7 @@ class CycleBookingController extends Controller
                         <button type="button" class="btn btn-sm btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Actions</button>
                         <div class="dropdown-menu dropdown-menu-sm">
                     ';
-                $dropdown .= '<button type="button" class="dropdown-item cancel_booking" data-target-id=' . $result->cycle_availability_id . ' rel="assignlocation" ><div class="row no-gutters align-items-center"><div class="col-2"><i class="ft-plus-circle"></i></div><div class="col-9 offset-1">Cancle Booking</div></button>';
+                $dropdown .= '<button type="button" class="dropdown-item cancel_booking" data-target-id=' . $result->cycle_availability_id . ' rel="assignlocation" ><div class="row no-gutters align-items-center"><div class="col-2"><i class="ft-plus-circle"></i></div><div class="col-9 offset-1">Remove Hours</div></button>';
 
                 $dropdown .= '<button type="button" class="dropdown-item feature" data-target-id=' . $result->cycle_availability_id . ' rel="assignlocation" ><div class="row no-gutters align-items-center"><div class="col-2"><i class="ft-plus-circle"></i></div><div class="col-9 offset-1">Feature Button</div></button>';
 
@@ -128,6 +128,16 @@ class CycleBookingController extends Controller
 
     public function cycle_show_hours(Request $request)
     {
+        $reservation = CycleInfo::join('cycle_availabilities as ca','ca.cycle_id','cycle_infos.id')
+            ->where('ca.available_date',$request->date)
+            ->where('ca.owner_id',auth()->id())
+            ->get();
+        return response()->json(['status' => 1, 'data' => $reservation]);
+    }
+
+    public function remove_cycle_hours(Request $request)
+    {
         dd($request->all());
+        // logic -> hour who acquire by user cannot delete
     }
 }
