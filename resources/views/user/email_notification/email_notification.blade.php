@@ -2,7 +2,7 @@
 @section('title', 'Email Notification')
 
 @section('content')
-
+    @include('admin.inc.messages')
     <h1 class="mb-2">Email Notification</h1>
 
     <section>
