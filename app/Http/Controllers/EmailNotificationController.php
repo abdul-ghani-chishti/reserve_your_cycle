@@ -10,4 +10,9 @@ class EmailNotificationController extends Controller
     {
      return view('user.email_notification.email_notification');
     }
+
+    public function email_send(Request $request)
+    {
+        dd($request->all());
+    }
 }

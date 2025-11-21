@@ -73,6 +73,7 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('email_notification')->name('email_notification.')->group(function () {
         Route::get('email', [EmailNotificationController::class, 'email'])->name('email'); // user can send email to admin
+        Route::post('email_send', [EmailNotificationController::class, 'email_send'])->name('email_send'); // user can send email to admin
     });
 
     Route::get('verify-email', EmailVerificationPromptController::class)

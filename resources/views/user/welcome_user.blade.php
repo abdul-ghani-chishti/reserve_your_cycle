@@ -715,7 +715,7 @@
             });
 
             let cycle_available = '{{$cycle_available}}'
-            console.log(cycle_available);
+
             if (cycle_available == 1) {
                 console.log('exist')
                 document.getElementById('cycle_brand_name').readOnly = true;
@@ -733,7 +733,7 @@
                     return false;
                 }
             } else {
-                console.log('not_exist')
+
                 document.getElementById('cycle_available_from').readOnly = false;
                 document.getElementById('cycle_available_to').readOnly = false;
                 document.getElementById('cycle_available_date').readOnly = false;
