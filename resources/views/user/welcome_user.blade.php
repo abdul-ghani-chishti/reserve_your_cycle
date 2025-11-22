@@ -498,8 +498,12 @@
                                     </div>
                                 </div>
                             @endif
-                            @if(in_array(session('user_status_id'),[2,3,4]))
-                                <h1 class="">Your account is under review !!!</h1>
+                            @if(in_array(session('user_status_id'),[2,3,5]))
+                                <h1 class="">Contact to Administrator !!!</h1>
+                            @endif
+                            @if(session('user_status_id') == 4)
+                                <h1 class="">Something is wrong with your documents !!!</h1>
+                                <p> Submit the documents again to admin email !!!</p>
                             @endif
                             {{--live chat--}}
                             <!-- Floating Chat Bubble -->
