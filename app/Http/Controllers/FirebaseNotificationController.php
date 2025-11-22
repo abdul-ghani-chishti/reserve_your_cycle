@@ -23,6 +23,7 @@ class FirebaseNotificationController extends Controller
     // Save FCM token
     public function saveToken(Request $request)
     {
+//        dd();
         $request->validate([
             'token' => 'required|string',
         ]);

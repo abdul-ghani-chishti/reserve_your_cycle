@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\FirebaseNotificationController;
 use App\Models\CycleAvailability;
 use App\Models\CycleImage;
 use App\Models\CycleInfo;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -193,6 +195,20 @@ class CycleInfoController extends Controller
                 $cycle_availablity->save();
             }
         }
+
+        $owner_id = User::find($cycle_availablity->owner_id);
+
+        if ($owner_id)
+        {
+            $request = Request::create('/send-test-push', 'POST', [
+                'token' => $owner_id->fcm_token,
+                'title' => 'Cycle Reservation Portal',
+                'body' => 'A user booked some slots of your cycle !'
+            ]);
+
+            app(FirebaseNotificationController::class)->sendTest($request);
+        }
+
         return redirect()->back()->with('success', 'You Reserved Your Hours !!!');
     }
 }
